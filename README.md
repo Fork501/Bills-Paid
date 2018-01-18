@@ -5,6 +5,6 @@ Simple application for keeping track of which bills you have paid and what's com
 `docker build -t bills-paid:latest .`
 
 ## Running the Docker container
-`docker run -p 6543:6543 bills-paid`
+`docker run -d -p 501:501 bills-paid`
 
-_Use the -d flag to run the container in the background.  Otherwise, your console will regurgitate the HTTP requests back to you_
+_The -d flag will force your container to run in the background.  If omitted, your console will regurgitate the HTTP requests back to you_
