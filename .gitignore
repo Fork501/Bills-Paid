@@ -114,7 +114,7 @@ ENV/
 */out-tsc
 
 # dependencies
-*/node_modules
+bills_paid/templates/node_modules/
 
 # IDEs and editors
 */.idea

@@ -1,0 +1,3 @@
+[run]
+source = bills_paid
+omit = bills_paid/test*

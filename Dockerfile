@@ -1,18 +1,18 @@
-FROM ubuntu:16.04
+FROM ubuntu:17.10
 
 RUN apt-get update -y && \
-    apt-get install -y python-pip python-dev && \
+	apt-get install -y python-pip python-dev && \
     pip install --upgrade pip setuptools
 
 # We copy this file first to leverage docker cache
-COPY ./requirements.txt /app/requirements.txt
+COPY ./requirements.txt /Bills-Paid/requirements.txt
 
-WORKDIR /app
+WORKDIR /Bills-Paid
 
 RUN pip install -r requirements.txt
 
-COPY . /app
+COPY . /Bills-Paid
 
-ENTRYPOINT [ "python" ]
+RUN pip install -e /Bills-Paid
 
-CMD [ "app.py" ]
+CMD pserve development.ini
