@@ -1,7 +1,7 @@
-FROM ubuntu:17.10
+FROM alpine
 
-RUN apt-get update -y && \
-	apt-get install -y python-pip python-dev && \
+RUN apk update && \
+	apk add python-dev py-pip && \
     pip install --upgrade pip setuptools
 
 # We copy this file first to leverage docker cache
