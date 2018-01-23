@@ -114,7 +114,7 @@ ENV/
 */out-tsc
 
 # dependencies
-bills_paid/templates/node_modules/
+node_modules/
 
 # IDEs and editors
 */.idea
@@ -150,3 +150,7 @@ testem.log
 Thumbs.db
 
 # ~~~END Angular 5~~~
+
+# Additional
+.vscode/
+compiled/

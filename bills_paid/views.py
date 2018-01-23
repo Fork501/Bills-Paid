@@ -1,6 +1,12 @@
-from pyramid.view import view_config
+from pyramid.view import view_config, view_defaults
 
 
-@view_config(route_name='home', renderer='templates/src/index.html')
-def my_view(request):
-    return {'project': 'Bills-Paid'}
+@view_defaults(renderer='index.html')
+class TutorialViews:
+    def __init__(self, request):
+        self.request = request
+
+    @view_config(route_name='home')
+    def my_view(self):
+        return {'project': 'Bills-Paid'}
+
