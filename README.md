@@ -7,9 +7,9 @@ Navigate to the **angular** folder and run the following command:
 `npm install`
 
 ## Building instructions
-Development should be done from the **angular** folder and work should be compiled into the **bills_paid/compiled** folder
+Development should be done from the **angular** folder.  Since this is an ejected project, the build command uses `npm`, instead of `ng`:
 
-`ng build --output-path ..\bills_paid\compiled`
+`npm run build`
 
 ## Building the Docker container
 `docker build -t bills-paid:latest .`
