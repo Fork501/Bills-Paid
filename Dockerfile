@@ -2,7 +2,7 @@ FROM alpine
 
 RUN apk update && \
 	apk add python-dev py-pip && \
-    pip install --upgrade pip setuptools
+	pip install --upgrade pip setuptools
 
 # We copy this file first to leverage docker cache
 COPY ./requirements.txt /Bills-Paid/requirements.txt

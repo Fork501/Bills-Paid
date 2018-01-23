@@ -24,482 +24,479 @@ const minimizeCss = false;
 const baseHref = "";
 const deployUrl = "";
 const postcssPlugins = function () {
-        // safe settings based on: https://github.com/ben-eb/cssnano/issues/358#issuecomment-283696193
-        const importantCommentRe = /@preserve|@license|[@#]\s*source(?:Mapping)?URL|^!/i;
-        const minimizeOptions = {
-            autoprefixer: false,
-            safe: true,
-            mergeLonghand: false,
-            discardComments: { remove: (comment) => !importantCommentRe.test(comment) }
-        };
-        return [
-            postcssUrl({
-                url: (URL) => {
-                    const { url } = URL;
-                    // Only convert root relative URLs, which CSS-Loader won't process into require().
-                    if (!url.startsWith('/') || url.startsWith('//')) {
-                        return URL.url;
-                    }
-                    if (deployUrl.match(/:\/\//)) {
-                        // If deployUrl contains a scheme, ignore baseHref use deployUrl as is.
-                        return `${deployUrl.replace(/\/$/, '')}${url}`;
-                    }
-                    else if (baseHref.match(/:\/\//)) {
-                        // If baseHref contains a scheme, include it as is.
-                        return baseHref.replace(/\/$/, '') +
-                            `/${deployUrl}/${url}`.replace(/\/\/+/g, '/');
-                    }
-                    else {
-                        // Join together base-href, deploy-url and the original URL.
-                        // Also dedupe multiple slashes into single ones.
-                        return `/${baseHref}/${deployUrl}/${url}`.replace(/\/\/+/g, '/');
-                    }
-                }
-            }),
-            autoprefixer(),
-            customProperties({ preserve: true })
-        ].concat(minimizeCss ? [cssnano(minimizeOptions)] : []);
-    };
-
-
-
+	// safe settings based on: https://github.com/ben-eb/cssnano/issues/358#issuecomment-283696193
+	const importantCommentRe = /@preserve|@license|[@#]\s*source(?:Mapping)?URL|^!/i;
+	const minimizeOptions = {
+			autoprefixer: false,
+			safe: true,
+			mergeLonghand: false,
+			discardComments: { remove: (comment) => !importantCommentRe.test(comment) }
+	};
+	return [
+			postcssUrl({
+					url: (URL) => {
+							const { url } = URL;
+							// Only convert root relative URLs, which CSS-Loader won't process into require().
+							if (!url.startsWith('/') || url.startsWith('//')) {
+									return URL.url;
+							}
+							if (deployUrl.match(/:\/\//)) {
+									// If deployUrl contains a scheme, ignore baseHref use deployUrl as is.
+									return `${deployUrl.replace(/\/$/, '')}${url}`;
+							}
+							else if (baseHref.match(/:\/\//)) {
+									// If baseHref contains a scheme, include it as is.
+									return baseHref.replace(/\/$/, '') +
+											`/${deployUrl}/${url}`.replace(/\/\/+/g, '/');
+							}
+							else {
+									// Join together base-href, deploy-url and the original URL.
+									// Also dedupe multiple slashes into single ones.
+									return `/${baseHref}/${deployUrl}/${url}`.replace(/\/\/+/g, '/');
+							}
+					}
+			}),
+			autoprefixer(),
+			customProperties({ preserve: true })
+	].concat(minimizeCss ? [cssnano(minimizeOptions)] : []);
+};
 
 module.exports = {
-  "resolve": {
-    "extensions": [
-      ".ts",
-      ".js"
-    ],
-    "modules": [
-      "./node_modules",
-      "./node_modules"
-    ],
-    "symlinks": true,
-    "alias": rxPaths(),
-    "mainFields": [
-      "browser",
-      "module",
-      "main"
-    ]
-  },
-  "resolveLoader": {
-    "modules": [
-      "./node_modules",
-      "./node_modules"
-    ],
-    "alias": rxPaths()
-  },
-  "entry": {
-    "main": [
-      "./src\\main.ts"
-    ],
-    "polyfills": [
-      "./src\\polyfills.ts"
-    ],
-    "styles": [
-      "./src\\styles.css"
-    ]
-  },
-  "output": {
-    "path": path.join(process.cwd().replace("angular", ""), "/bills_paid/compiled"),
-    "filename": "scripts/[name].bundle.js",
-    "chunkFilename": "scripts/[id].chunk.js",
-    "crossOriginLoading": false
-  },
-  "module": {
-    "rules": [
-      {
-        "test": /\.html$/,
-        "loader": "raw-loader"
-      },
-      {
-        "test": /\.(eot|svg|cur)$/,
-        "loader": "file-loader",
-        "options": {
-          "name": "[name].[hash:20].[ext]",
-          "limit": 10000
-        }
-      },
-      {
-        "test": /\.(jpg|png|webp|gif|otf|ttf|woff|woff2|ani)$/,
-        "loader": "url-loader",
-        "options": {
-          "name": "[name].[hash:20].[ext]",
-          "limit": 10000
-        }
-      },
-      {
-        "exclude": [
-          path.join(process.cwd(), "src\\styles.css")
-        ],
-        "test": /\.css$/,
-        "use": [
-          "exports-loader?module.exports.toString()",
-          {
-            "loader": "css-loader",
-            "options": {
-              "sourceMap": true,
-              "importLoaders": 1
-            }
-          },
-          {
-            "loader": "postcss-loader",
-            "options": {
-              "ident": "postcss",
-              "plugins": postcssPlugins,
-              "sourceMap": true
-            }
-          }
-        ]
-      },
-      {
-        "exclude": [
-          path.join(process.cwd(), "src\\styles.css")
-        ],
-        "test": /\.scss$|\.sass$/,
-        "use": [
-          "exports-loader?module.exports.toString()",
-          {
-            "loader": "css-loader",
-            "options": {
-              "sourceMap": true,
-              "importLoaders": 1
-            }
-          },
-          {
-            "loader": "postcss-loader",
-            "options": {
-              "ident": "postcss",
-              "plugins": postcssPlugins,
-              "sourceMap": true
-            }
-          },
-          {
-            "loader": "sass-loader",
-            "options": {
-              "sourceMap": true,
-              "precision": 8,
-              "includePaths": []
-            }
-          }
-        ]
-      },
-      {
-        "exclude": [
-          path.join(process.cwd(), "src\\styles.css")
-        ],
-        "test": /\.less$/,
-        "use": [
-          "exports-loader?module.exports.toString()",
-          {
-            "loader": "css-loader",
-            "options": {
-              "sourceMap": true,
-              "importLoaders": 1
-            }
-          },
-          {
-            "loader": "postcss-loader",
-            "options": {
-              "ident": "postcss",
-              "plugins": postcssPlugins,
-              "sourceMap": true
-            }
-          },
-          {
-            "loader": "less-loader",
-            "options": {
-              "sourceMap": true
-            }
-          }
-        ]
-      },
-      {
-        "exclude": [
-          path.join(process.cwd(), "src\\styles.css")
-        ],
-        "test": /\.styl$/,
-        "use": [
-          "exports-loader?module.exports.toString()",
-          {
-            "loader": "css-loader",
-            "options": {
-              "sourceMap": true,
-              "importLoaders": 1
-            }
-          },
-          {
-            "loader": "postcss-loader",
-            "options": {
-              "ident": "postcss",
-              "plugins": postcssPlugins,
-              "sourceMap": true
-            }
-          },
-          {
-            "loader": "stylus-loader",
-            "options": {
-              "sourceMap": true,
-              "paths": []
-            }
-          }
-        ]
-      },
-      {
-        "include": [
-          path.join(process.cwd(), "src\\styles.css")
-        ],
-        "test": /\.css$/,
-        "loaders": ExtractTextPlugin.extract({
-  "use": [
-    {
-      "loader": "css-loader",
-      "options": {
-        "sourceMap": true,
-        "importLoaders": 1
-      }
-    },
-    {
-      "loader": "postcss-loader",
-      "options": {
-        "ident": "postcss",
-        "plugins": postcssPlugins,
-        "sourceMap": true
-      }
-    }
-  ],
-  "publicPath": ""
-})
-      },
-      {
-        "include": [
-          path.join(process.cwd(), "src\\styles.css")
-        ],
-        "test": /\.scss$|\.sass$/,
-        "loaders": ExtractTextPlugin.extract({
-  "use": [
-    {
-      "loader": "css-loader",
-      "options": {
-        "sourceMap": true,
-        "importLoaders": 1
-      }
-    },
-    {
-      "loader": "postcss-loader",
-      "options": {
-        "ident": "postcss",
-        "plugins": postcssPlugins,
-        "sourceMap": true
-      }
-    },
-    {
-      "loader": "sass-loader",
-      "options": {
-        "sourceMap": true,
-        "precision": 8,
-        "includePaths": []
-      }
-    }
-  ],
-  "publicPath": ""
-})
-      },
-      {
-        "include": [
-          path.join(process.cwd(), "src\\styles.css")
-        ],
-        "test": /\.less$/,
-        "loaders": ExtractTextPlugin.extract({
-  "use": [
-    {
-      "loader": "css-loader",
-      "options": {
-        "sourceMap": true,
-        "importLoaders": 1
-      }
-    },
-    {
-      "loader": "postcss-loader",
-      "options": {
-        "ident": "postcss",
-        "plugins": postcssPlugins,
-        "sourceMap": true
-      }
-    },
-    {
-      "loader": "less-loader",
-      "options": {
-        "sourceMap": true
-      }
-    }
-  ],
-  "publicPath": ""
-})
-      },
-      {
-        "include": [
-          path.join(process.cwd(), "src\\styles.css")
-        ],
-        "test": /\.styl$/,
-        "loaders": ExtractTextPlugin.extract({
-  "use": [
-    {
-      "loader": "css-loader",
-      "options": {
-        "sourceMap": true,
-        "importLoaders": 1
-      }
-    },
-    {
-      "loader": "postcss-loader",
-      "options": {
-        "ident": "postcss",
-        "plugins": postcssPlugins,
-        "sourceMap": true
-      }
-    },
-    {
-      "loader": "stylus-loader",
-      "options": {
-        "sourceMap": true,
-        "paths": []
-      }
-    }
-  ],
-  "publicPath": ""
-})
-      },
-      {
-        "test": /\.ts$/,
-        "loader": "@ngtools/webpack"
-      }
-    ]
-  },
-  "plugins": [
-    new NoEmitOnErrorsPlugin(),
-    new CopyWebpackPlugin([
-      {
-        "context": "src",
-        "to": "",
-        "from": {
-          "glob": "assets/**/*",
-          "dot": true
-        }
-      },
-      {
-        "context": "src",
-        "to": "",
-        "from": {
-          "glob": "favicon.ico",
-          "dot": true
-        }
-      }
-    ], {
-      "ignore": [
-        ".gitkeep",
-        "**/.DS_Store",
-        "**/Thumbs.db"
-      ],
-      "debug": "warning"
-    }),
-    new ProgressPlugin(),
-    new CircularDependencyPlugin({
-      "exclude": /(\\|\/)node_modules(\\|\/)/,
-      "failOnError": false
-    }),
-    new NamedLazyChunksWebpackPlugin(),
-    new HtmlWebpackPlugin({
-      "template": "./src\\index.html",
-      "filename": "./index.html",
-      "hash": false,
-      "inject": true,
-      "compile": true,
-      "favicon": false,
-      "minify": false,
-      "cache": true,
-      "showErrors": true,
-      "chunks": "all",
-      "excludeChunks": [],
-      "title": "Webpack App",
-      "xhtml": true,
-      "chunksSortMode": function sort(left, right) {
-        let leftIndex = entryPoints.indexOf(left.names[0]);
-        let rightindex = entryPoints.indexOf(right.names[0]);
-        if (leftIndex > rightindex) {
-            return 1;
-        }
-        else if (leftIndex < rightindex) {
-            return -1;
-        }
-        else {
-            return 0;
-        }
-    }
-    }),
-    new BaseHrefWebpackPlugin({}),
-    new CommonsChunkPlugin({
-      "name": [
-        "inline"
-      ],
-      "minChunks": null
-    }),
-    new CommonsChunkPlugin({
-      "name": [
-        "vendor"
-      ],
-      "minChunks": (module) => {
-                return module.resource
-                    && (module.resource.startsWith(nodeModules)
-                        || module.resource.startsWith(genDirNodeModules)
-                        || module.resource.startsWith(realNodeModules));
-            },
-      "chunks": [
-        "main"
-      ]
-    }),
-    new SourceMapDevToolPlugin({
-      "filename": "[file].map[query]",
-      "moduleFilenameTemplate": "[resource-path]",
-      "fallbackModuleFilenameTemplate": "[resource-path]?[hash]",
-      "sourceRoot": "webpack:///"
-    }),
-    new CommonsChunkPlugin({
-      "name": [
-        "main"
-      ],
-      "minChunks": 2,
-      "async": "common"
-    }),
-    new ExtractTextPlugin({
-      "filename": "styles\\[name].bundle.css"
-    }),
-    new SuppressExtractedTextChunksWebpackPlugin(),
-    new NamedModulesPlugin({}),
-    new AngularCompilerPlugin({
-      "mainPath": "main.ts",
-      "platform": 0,
-      "hostReplacementPaths": {
-        "environments\\environment.ts": "environments\\environment.ts"
-      },
-      "sourceMap": true,
-      "tsConfigPath": "src\\tsconfig.app.json",
-      "skipCodeGeneration": true,
-      "compilerOptions": {}
-    })
-  ],
-  "node": {
-    "fs": "empty",
-    "global": true,
-    "crypto": "empty",
-    "tls": "empty",
-    "net": "empty",
-    "process": true,
-    "module": false,
-    "clearImmediate": false,
-    "setImmediate": false
-  },
-  "devServer": {
-    "historyApiFallback": true
-  }
+	"resolve": {
+		"extensions": [
+			".ts",
+			".js"
+		],
+		"modules": [
+			"./node_modules",
+			"./node_modules"
+		],
+		"symlinks": true,
+		"alias": rxPaths(),
+		"mainFields": [
+			"browser",
+			"module",
+			"main"
+		]
+	},
+	"resolveLoader": {
+		"modules": [
+			"./node_modules",
+			"./node_modules"
+		],
+		"alias": rxPaths()
+	},
+	"entry": {
+		"main": [
+			"./src\\main.ts"
+		],
+		"polyfills": [
+			"./src\\polyfills.ts"
+		],
+		"styles": [
+			"./src\\styles.css"
+		]
+	},
+	"output": {
+		"path": path.join(process.cwd().replace("angular", ""), "/bills_paid/compiled"),
+		"filename": "scripts/[name].bundle.js",
+		"chunkFilename": "scripts/[id].chunk.js",
+		"crossOriginLoading": false
+	},
+	"module": {
+		"rules": [
+			{
+				"test": /\.html$/,
+				"loader": "raw-loader"
+			},
+			{
+				"test": /\.(eot|svg|cur)$/,
+				"loader": "file-loader",
+				"options": {
+					"name": "[name].[hash:20].[ext]",
+					"limit": 10000
+				}
+			},
+			{
+				"test": /\.(jpg|png|webp|gif|otf|ttf|woff|woff2|ani)$/,
+				"loader": "url-loader",
+				"options": {
+					"name": "[name].[hash:20].[ext]",
+					"limit": 10000
+				}
+			},
+			{
+				"exclude": [
+					path.join(process.cwd(), "src\\styles.css")
+				],
+				"test": /\.css$/,
+				"use": [
+					"exports-loader?module.exports.toString()",
+					{
+						"loader": "css-loader",
+						"options": {
+							"sourceMap": true,
+							"importLoaders": 1
+						}
+					},
+					{
+						"loader": "postcss-loader",
+						"options": {
+							"ident": "postcss",
+							"plugins": postcssPlugins,
+							"sourceMap": true
+						}
+					}
+				]
+			},
+			{
+				"exclude": [
+					path.join(process.cwd(), "src\\styles.css")
+				],
+				"test": /\.scss$|\.sass$/,
+				"use": [
+					"exports-loader?module.exports.toString()",
+					{
+						"loader": "css-loader",
+						"options": {
+							"sourceMap": true,
+							"importLoaders": 1
+						}
+					},
+					{
+						"loader": "postcss-loader",
+						"options": {
+							"ident": "postcss",
+							"plugins": postcssPlugins,
+							"sourceMap": true
+						}
+					},
+					{
+						"loader": "sass-loader",
+						"options": {
+							"sourceMap": true,
+							"precision": 8,
+							"includePaths": []
+						}
+					}
+				]
+			},
+			{
+				"exclude": [
+					path.join(process.cwd(), "src\\styles.css")
+				],
+				"test": /\.less$/,
+				"use": [
+					"exports-loader?module.exports.toString()",
+					{
+						"loader": "css-loader",
+						"options": {
+							"sourceMap": true,
+							"importLoaders": 1
+						}
+					},
+					{
+						"loader": "postcss-loader",
+						"options": {
+							"ident": "postcss",
+							"plugins": postcssPlugins,
+							"sourceMap": true
+						}
+					},
+					{
+						"loader": "less-loader",
+						"options": {
+							"sourceMap": true
+						}
+					}
+				]
+			},
+			{
+				"exclude": [
+					path.join(process.cwd(), "src\\styles.css")
+				],
+				"test": /\.styl$/,
+				"use": [
+					"exports-loader?module.exports.toString()",
+					{
+						"loader": "css-loader",
+						"options": {
+							"sourceMap": true,
+							"importLoaders": 1
+						}
+					},
+					{
+						"loader": "postcss-loader",
+						"options": {
+							"ident": "postcss",
+							"plugins": postcssPlugins,
+							"sourceMap": true
+						}
+					},
+					{
+						"loader": "stylus-loader",
+						"options": {
+							"sourceMap": true,
+							"paths": []
+						}
+					}
+				]
+			},
+			{
+				"include": [
+					path.join(process.cwd(), "src\\styles.css")
+				],
+				"test": /\.css$/,
+				"loaders": ExtractTextPlugin.extract({
+					"use": [
+						{
+							"loader": "css-loader",
+							"options": {
+								"sourceMap": true,
+								"importLoaders": 1
+							}
+						},
+						{
+							"loader": "postcss-loader",
+							"options": {
+								"ident": "postcss",
+								"plugins": postcssPlugins,
+								"sourceMap": true
+							}
+						}
+					],
+					"publicPath": ""
+				})
+			},
+			{
+				"include": [
+					path.join(process.cwd(), "src\\styles.css")
+				],
+				"test": /\.scss$|\.sass$/,
+				"loaders": ExtractTextPlugin.extract({
+					"use": [
+						{
+							"loader": "css-loader",
+							"options": {
+								"sourceMap": true,
+								"importLoaders": 1
+							}
+						},
+						{
+							"loader": "postcss-loader",
+							"options": {
+								"ident": "postcss",
+								"plugins": postcssPlugins,
+								"sourceMap": true
+							}
+						},
+						{
+							"loader": "sass-loader",
+							"options": {
+								"sourceMap": true,
+								"precision": 8,
+								"includePaths": []
+							}
+						}
+					],
+					"publicPath": ""
+				})
+			},
+			{
+				"include": [
+					path.join(process.cwd(), "src\\styles.css")
+				],
+				"test": /\.less$/,
+				"loaders": ExtractTextPlugin.extract({
+					"use": [
+						{
+							"loader": "css-loader",
+							"options": {
+								"sourceMap": true,
+								"importLoaders": 1
+							}
+						},
+						{
+							"loader": "postcss-loader",
+							"options": {
+								"ident": "postcss",
+								"plugins": postcssPlugins,
+								"sourceMap": true
+							}
+						},
+						{
+							"loader": "less-loader",
+							"options": {
+								"sourceMap": true
+							}
+						}
+					],
+					"publicPath": ""
+				})
+			},
+			{
+				"include": [
+					path.join(process.cwd(), "src\\styles.css")
+				],
+				"test": /\.styl$/,
+				"loaders": ExtractTextPlugin.extract({
+					"use": [
+						{
+							"loader": "css-loader",
+							"options": {
+								"sourceMap": true,
+								"importLoaders": 1
+							}
+						},
+						{
+							"loader": "postcss-loader",
+							"options": {
+								"ident": "postcss",
+								"plugins": postcssPlugins,
+								"sourceMap": true
+							}
+						},
+						{
+							"loader": "stylus-loader",
+							"options": {
+								"sourceMap": true,
+								"paths": []
+							}
+						}
+					],
+					"publicPath": ""
+				})
+			},
+			{
+				"test": /\.ts$/,
+				"loader": "@ngtools/webpack"
+			}
+		]
+	},
+	"plugins": [
+		new NoEmitOnErrorsPlugin(),
+		new CopyWebpackPlugin([
+			{
+				"context": "src",
+				"to": "",
+				"from": {
+					"glob": "assets/**/*",
+					"dot": true
+				}
+			},
+			{
+				"context": "src",
+				"to": "",
+				"from": {
+					"glob": "favicon.ico",
+					"dot": true
+				}
+			}
+		], {
+			"ignore": [
+				".gitkeep",
+				"**/.DS_Store",
+				"**/Thumbs.db"
+			],
+			"debug": "warning"
+		}),
+		new ProgressPlugin(),
+		new CircularDependencyPlugin({
+			"exclude": /(\\|\/)node_modules(\\|\/)/,
+			"failOnError": false
+		}),
+		new NamedLazyChunksWebpackPlugin(),
+		new HtmlWebpackPlugin({
+			"template": "./src\\index.html",
+			"filename": "./index.html",
+			"hash": false,
+			"inject": true,
+			"compile": true,
+			"favicon": false,
+			"minify": false,
+			"cache": true,
+			"showErrors": true,
+			"chunks": "all",
+			"excludeChunks": [],
+			"title": "Webpack App",
+			"xhtml": true,
+			"chunksSortMode": function sort(left, right) {
+				let leftIndex = entryPoints.indexOf(left.names[0]);
+				let rightindex = entryPoints.indexOf(right.names[0]);
+				if (leftIndex > rightindex) {
+						return 1;
+				}
+				else if (leftIndex < rightindex) {
+						return -1;
+				}
+				else {
+						return 0;
+				}
+		}
+		}),
+		new BaseHrefWebpackPlugin({}),
+		new CommonsChunkPlugin({
+			"name": [
+				"inline"
+			],
+			"minChunks": null
+		}),
+		new CommonsChunkPlugin({
+			"name": [
+				"vendor"
+			],
+			"minChunks": (module) => {
+								return module.resource
+										&& (module.resource.startsWith(nodeModules)
+												|| module.resource.startsWith(genDirNodeModules)
+												|| module.resource.startsWith(realNodeModules));
+						},
+			"chunks": [
+				"main"
+			]
+		}),
+		new SourceMapDevToolPlugin({
+			"filename": "[file].map[query]",
+			"moduleFilenameTemplate": "[resource-path]",
+			"fallbackModuleFilenameTemplate": "[resource-path]?[hash]",
+			"sourceRoot": "webpack:///"
+		}),
+		new CommonsChunkPlugin({
+			"name": [
+				"main"
+			],
+			"minChunks": 2,
+			"async": "common"
+		}),
+		new ExtractTextPlugin({
+			"filename": "styles\\[name].bundle.css"
+		}),
+		new SuppressExtractedTextChunksWebpackPlugin(),
+		new NamedModulesPlugin({}),
+		new AngularCompilerPlugin({
+			"mainPath": "main.ts",
+			"platform": 0,
+			"hostReplacementPaths": {
+				"environments\\environment.ts": "environments\\environment.ts"
+			},
+			"sourceMap": true,
+			"tsConfigPath": "src\\tsconfig.app.json",
+			"skipCodeGeneration": true,
+			"compilerOptions": {}
+		})
+	],
+	"node": {
+		"fs": "empty",
+		"global": true,
+		"crypto": "empty",
+		"tls": "empty",
+		"net": "empty",
+		"process": true,
+		"module": false,
+		"clearImmediate": false,
+		"setImmediate": false
+	},
+	"devServer": {
+		"historyApiFallback": true
+	}
 };
