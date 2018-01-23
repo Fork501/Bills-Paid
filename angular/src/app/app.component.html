@@ -16,5 +16,16 @@
 	<li>
 		<h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
 	</li>
+	<li>
+		{{ theList.length }}
+	</li>
+	<li>
+		<span *ngFor="let item of theList">{{ item }} </span>
+	</li>
 </ul>
 
+<button (click)="addToList()">Add Another</button>
+
+<a routerLink="/bills">Bills</a>
+
+<router-outlet></router-outlet>
