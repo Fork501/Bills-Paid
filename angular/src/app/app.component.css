@@ -1,0 +1,40 @@
+/*
+	Based off of the Angular fixed sidenav example:
+	https://stackblitz.com/angular/nqnpkxomqxx
+*/
+
+.footer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;  
+}
+
+.header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+}
+
+/*
+	CSS gradients generated from "Ultimate CSS Gradient Generator"
+	http://www.colorzilla.com/gradient-editor/
+*/
+
+.sideNav {
+	background: #b5bdc8;
+}
+
+.titleCard {
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#28343b+0,828c95+83,b5bdc8+99,b5bdc8+99 */
+	background: #28343b; /* Old browsers */
+	background: -moz-linear-gradient(-45deg, #28343b 0%, #828c95 83%, #b5bdc8 99%, #b5bdc8 99%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(-45deg, #28343b 0%,#828c95 83%,#b5bdc8 99%,#b5bdc8 99%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(135deg, #28343b 0%,#828c95 83%,#b5bdc8 99%,#b5bdc8 99%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#28343b', endColorstr='#b5bdc8',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+.titleCard h1 {
+	color:#FAFAFA;
+}

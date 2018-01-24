@@ -6,7 +6,7 @@ import { AppRoutingModule } from './/app-routing.module';
 import { BillsComponent } from './bills/bills.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatDividerModule, MatListModule, MatSidenavModule } from '@angular/material'
+import { MatCardModule, MatDividerModule, MatListModule, MatSidenavModule, MatToolbarModule } from '@angular/material'
 
 @NgModule({
 	declarations: [
@@ -17,8 +17,10 @@ import { MatDividerModule, MatListModule, MatSidenavModule } from '@angular/mate
 		AppRoutingModule,
 		BrowserAnimationsModule,
 		BrowserModule,
+		MatCardModule,
 		MatListModule,
-		MatSidenavModule
+		MatSidenavModule,
+		MatToolbarModule
 	],
 	providers: [],
 	bootstrap: [
@@ -26,8 +28,10 @@ import { MatDividerModule, MatListModule, MatSidenavModule } from '@angular/mate
 	],
 	exports: [
 		BrowserAnimationsModule,
+		MatCardModule,
 		MatListModule,
-		MatSidenavModule
+		MatSidenavModule,
+		MatToolbarModule
 	]
 })
 export class AppModule { }
