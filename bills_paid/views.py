@@ -12,7 +12,17 @@ class BillsPaidViews:
 		"""Routes requests for /home to the home route"""
 		return {'project': 'Bills-Paid'}
 
+	@view_config(route_name='accounts')
+	def accounts_view(self):
+		"""Routes requests for /accounts to the accounts route"""
+		return {'project': 'Bills-Paid'}
+
 	@view_config(route_name='bills')
 	def bills_view(self):
 		"""Routes requests for /bills to the bills route"""
+		return {'project': 'Bills-Paid'}
+
+	@view_config(route_name='dashboard')
+	def dashboard_view(self):
+		"""Routes requests for /dashboard to the dashboard route"""
 		return {'project': 'Bills-Paid'}

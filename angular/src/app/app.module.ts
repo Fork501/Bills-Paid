@@ -6,12 +6,16 @@ import { AppRoutingModule } from './/app-routing.module';
 import { BillsComponent } from './bills/bills.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatCardModule, MatDividerModule, MatListModule, MatSidenavModule, MatToolbarModule } from '@angular/material'
+import { MatCardModule, MatDividerModule, MatListModule, MatSidenavModule, MatToolbarModule } from '@angular/material';
+import { AccountsComponent } from './accounts/accounts.component';
+import { DashboardComponent } from './dashboard/dashboard.component'
 
 @NgModule({
 	declarations: [
 		AppComponent,
-		BillsComponent
+		BillsComponent,
+		AccountsComponent,
+		DashboardComponent
 	],
 	imports: [
 		AppRoutingModule,

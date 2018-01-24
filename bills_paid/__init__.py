@@ -1,6 +1,12 @@
 """Bills Paid"""
 from pyramid.config import Configurator
 
+ROUTES = [
+	{'route': 'accounts', 'path': '/accounts'},
+	{'route': 'bills', 'path': '/bills'},
+	{'route': 'dashboard', 'path': '/dashboard'}
+]
+
 
 def main(global_config, **settings):
 	"""
@@ -17,7 +23,9 @@ def main(global_config, **settings):
 	config.add_static_view('styles', 'compiled/styles', cache_max_age=0)
 
 	config.add_route('home', '/')
-	config.add_route('bills', '/bills')
+
+	for route in ROUTES:
+		config.add_route(route['route'], route['path'])
 
 	config.scan()
 
