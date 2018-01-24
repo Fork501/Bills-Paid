@@ -1,11 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { BillsComponent } from './bills/bills.component';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDividerModule, MatListModule, MatSidenavModule } from '@angular/material'
 
 @NgModule({
 	declarations: [
@@ -13,10 +14,20 @@ import { BillsComponent } from './bills/bills.component';
 		BillsComponent
 	],
 	imports: [
+		AppRoutingModule,
+		BrowserAnimationsModule,
 		BrowserModule,
-		AppRoutingModule
+		MatListModule,
+		MatSidenavModule
 	],
 	providers: [],
-	bootstrap: [AppComponent]
+	bootstrap: [
+		AppComponent
+	],
+	exports: [
+		BrowserAnimationsModule,
+		MatListModule,
+		MatSidenavModule
+	]
 })
 export class AppModule { }
