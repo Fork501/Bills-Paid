@@ -1,3 +1,4 @@
+"""Pyramid views"""
 from pyramid.view import view_config, view_defaults
 
 
@@ -7,10 +8,11 @@ class BillsPaidViews:
 			self.request = request
 
 	@view_config(route_name='home')
-	def my_view(self):
-			return {'project': 'Bills-Paid'}
+	def home_view(self):
+		"""Routes requests for /home to the home route"""
+		return {'project': 'Bills-Paid'}
 
 	@view_config(route_name='bills')
-	def my_view(self):
-			return {'project': 'Bills-Paid'}
-
+	def bills_view(self):
+		"""Routes requests for /bills to the bills route"""
+		return {'project': 'Bills-Paid'}
