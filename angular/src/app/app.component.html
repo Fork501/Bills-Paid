@@ -1,15 +1,15 @@
 <mat-toolbar class="header">Header</mat-toolbar>
-<mat-sidenav-container style="top:60px;">
+<mat-sidenav-container class="sideNavContainer">
 	<mat-sidenav #sidenav mode="side" opened="true"
 		[fixedInViewport]="true" [fixedTopGap]="0" [fixedBottomGap]="0"
 		class="sideNav">
-		<mat-nav-list>
+		<mat-nav-list class="noTopPadding">
 			<mat-card mat-list-item class="titleCard"><h1>Bills Paid</h1></mat-card>
+			<a mat-list-item routerLink="/dashboard">Dashboard</a>
+			<mat-divider></mat-divider>
+			<a mat-list-item routerLink="/accounts">Accounts</a>
+			<mat-divider></mat-divider>
 			<a mat-list-item routerLink="/bills">Bills</a>
-			<mat-divider></mat-divider>
-			<a mat-list-item href="#">Item 2</a>
-			<mat-divider></mat-divider>
-			<a mat-list-item href="#">Item 3</a>
 		</mat-nav-list>
 	</mat-sidenav>
 	<mat-sidenav-content>
