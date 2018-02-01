@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http'
+import { Message } from '../models/message.model'
 
 @Component({
   selector: 'app-bills',
@@ -7,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BillsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private httpClient: HttpClient) { }
+
+  helloMessage = new Message();
 
   ngOnInit() {
+    this.getHelloMessage();
   }
 
+  getHelloMessage() {
+    return this.httpClient.get('/api/hello').subscribe(
+      data => {this.helloMessage = <Message>data}
+    );
+  }
 }

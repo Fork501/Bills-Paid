@@ -1,10 +1,17 @@
 """Bills Paid"""
 from pyramid.config import Configurator
 
-ROUTES = [
-	{'route': 'accounts', 'path': '/accounts'},
-	{'route': 'bills', 'path': '/bills'},
-	{'route': 'dashboard', 'path': '/dashboard'}
+API_ROUTES = [
+	{'route' : 'apiHome', 'path' : '/'},
+	{'route' : 'apiHello', 'path' : '/hello'},
+	{'route' : 'apiGoodbye', 'path' : '/goodbye'}
+]
+
+VIEW_ROUTES = [
+	{'route' : 'home', 'path' : '/'},
+	{'route' : 'accounts', 'path' : '/accounts'},
+	{'route' : 'bills', 'path' : '/bills'},
+	{'route' : 'dashboard', 'path' : '/dashboard'}
 ]
 
 
@@ -22,10 +29,11 @@ def main(global_config, **settings):
 	config.add_static_view('scripts', 'compiled/scripts', cache_max_age=0)
 	config.add_static_view('styles', 'compiled/styles', cache_max_age=0)
 
-	config.add_route('home', '/')
-
-	for route in ROUTES:
+	for route in VIEW_ROUTES:
 		config.add_route(route['route'], route['path'])
+
+	for route in API_ROUTES:
+		config.add_route(route['route'], '/api{0}'.format(route['path']))
 
 	config.scan()
 
