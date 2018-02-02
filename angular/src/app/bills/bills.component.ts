@@ -11,15 +11,18 @@ export class BillsComponent implements OnInit {
 
   constructor(private httpClient: HttpClient) { }
 
-  helloMessage = new Message();
+  helloMessage = {};
 
   ngOnInit() {
     this.getHelloMessage();
   }
 
   getHelloMessage() {
-    return this.httpClient.get('/api/hello').subscribe(
-      data => {this.helloMessage = <Message>data}
+    this.httpClient.get('/api/hello').subscribe(
+      data => {
+        //this.helloMessage = <Message>data
+        console.log(data);
+      }
     );
   }
 }

@@ -8,14 +8,16 @@ with open(os.path.join(here, 'README.txt')) as f:
 with open(os.path.join(here, 'CHANGES.txt')) as f:
 		CHANGES = f.read()
 
-requires = [
-		'pyramid',
-		'pyramid_chameleon',
-		'pyramid_debugtoolbar',
-		'waitress',
-		]
+REQUIRES = [
+	'pymongo',
+	'pyramid',
+	'pyramid_chameleon',
+	'pyramid_debugtoolbar',
+	'pyramid_jinja2',
+	'waitress',
+]
 
-tests_require = [
+TESTS_REQUIRE = [
 		'WebTest >= 1.3.1',	# py3 compat
 		'pytest',	# includes virtualenv
 		'pytest-cov',
@@ -39,9 +41,9 @@ setup(name='Bills-Paid',
 			include_package_data=True,
 			zip_safe=False,
 			extras_require={
-					'testing': tests_require,
+					'testing': TESTS_REQUIRE,
 			},
-			install_requires=requires,
+			install_requires=REQUIRES,
 			entry_points="""\
 			[paste.app_factory]
 			main = bills_paid:main
