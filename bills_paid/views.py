@@ -11,12 +11,9 @@ class BillsPaidApi(object):
 		self.request = request
 		self.mongo_client = MongoClient()
 
+	"""
 	@view_config(route_name='apiHello', renderer='json')
 	def hello_world(self):
-		"""Hello, world!"""
-
-		# self.mongo_client.insert_account(account={'name' : 'My Account'})
-
 		my_response = [
 			json.dumps
 			(
@@ -25,15 +22,35 @@ class BillsPaidApi(object):
 			) for account in self.mongo_client.get_all_accounts()
 		]
 
-		return my_response
+		my_response = "Hello, world"
 
-	@view_config(route_name='apiGoodbye', renderer='json')
-	def goodbye_world(self):
-		"""Goodbye, world!"""
-		my_response = {
-			"message" : "Goodbye, world!"
-		}
 		return my_response
+	"""
+
+@view_defaults(route_name='apiAccount', renderer='json')
+class AccountApi(object):
+	"""API methods for /account"""
+	def __init__(self, request):
+		self.request = request
+		self.mongo_client = MongoClient()
+
+	@view_config(request_method='POST')
+	def create_account(self):
+		"""Creates a new account"""
+		res = json.loads(self.request.body)
+		self.mongo_client.insert_account({'Name' : res['Name'], 'DayOfMonth' : res['DayOfMonth'] })
+		return {'Result' : 'Success'}
+
+	@view_config(request_method='GET')
+	def get_accounts(self):
+		"""Retrieve all accounts"""
+		return [
+			json.dumps
+			(
+				account,
+				default=json_util.default
+			) for account in self.mongo_client.get_all_accounts()
+		]
 
 
 @view_defaults(renderer='index.html')

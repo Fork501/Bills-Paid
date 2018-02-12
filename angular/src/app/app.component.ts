@@ -7,10 +7,4 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 	title = 'Bills Paid';
-
-	theList = ["Hello"];
-
-	addToList(){
-		this.theList.push("Hello");
-	}
 }

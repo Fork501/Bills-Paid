@@ -1,1 +1,31 @@
-<h2>Accounts</h2>
+<mat-tab-group>
+	<mat-tab label="List">
+		Total accounts: {{totalAccounts}}
+	</mat-tab>
+	<mat-tab label="New">
+		<!-- <form> -->
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col col-3">
+						<mat-form-field>
+							<input matInput placeholder="Account Name" [(ngModel)]="account.Name" />
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col col-3">
+						<mat-form-field>
+							<input matInput placeholder="Draft Day" [(ngModel)]="account.DayOfMonth" />
+							<!-- <input matInput placeholder="Draft Day" type="number" min="1" max="31" increment="1.0" ng-model="myVar" /> -->
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col col-12 text-center">
+						<button type="button" class="btn btn-lg btn-primary" (click)="SaveAccount()">Save</button>
+					</div>
+				</div>
+			</div>
+		<!-- </form> -->
+	</mat-tab>
+</mat-tab-group>

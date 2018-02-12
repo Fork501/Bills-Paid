@@ -1,10 +1,11 @@
 """Bills Paid"""
 from pyramid.config import Configurator
+from pyramid.view import view_config
 
 API_ROUTES = [
 	{'route' : 'apiHome', 'path' : '/'},
 	{'route' : 'apiHello', 'path' : '/hello'},
-	{'route' : 'apiGoodbye', 'path' : '/goodbye'}
+	{'route' : 'apiAccount', 'path' : '/account'}
 ]
 
 VIEW_ROUTES = [
