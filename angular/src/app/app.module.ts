@@ -5,18 +5,33 @@ import { HttpClientModule } from '@angular/common/http'
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './/app-routing.module';
-import { BillsComponent } from './bills/bills.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatCardModule, MatChipsModule, MatDividerModule, MatInputModule, MatListModule, MatSidenavModule, MatTableModule, MatTabsModule, MatToolbarModule } from '@angular/material';
+import {
+	MatCardModule,
+	MatChipsModule,
+	MatDialogModule,
+	MatDividerModule,
+	MatInputModule,
+	MatListModule,
+	MatSidenavModule,
+	MatSnackBarModule,
+	MatTableModule,
+	MatTabsModule,
+	MatToolbarModule
+} from '@angular/material';
+
 import { AccountsComponent } from './accounts/accounts.component';
-import { DashboardComponent } from './dashboard/dashboard.component'
+import { AccountEditComponent } from './accounts/account-edit/account-edit.component';
+import { BillsComponent } from './bills/bills.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
 	declarations: [
 		AppComponent,
-		BillsComponent,
 		AccountsComponent,
+		AccountEditComponent,
+		BillsComponent,
 		DashboardComponent
 	],
 	imports: [
@@ -27,9 +42,11 @@ import { DashboardComponent } from './dashboard/dashboard.component'
 		MatChipsModule,
 		HttpClientModule,
 		MatCardModule,
+		MatDialogModule,
 		MatInputModule,
 		MatListModule,
 		MatSidenavModule,
+		MatSnackBarModule,
 		MatTableModule,
 		MatTabsModule,
 		MatToolbarModule
@@ -42,12 +59,15 @@ import { DashboardComponent } from './dashboard/dashboard.component'
 		BrowserAnimationsModule,
 		MatCardModule,
 		MatChipsModule,
+		MatDialogModule,
 		MatInputModule,
 		MatListModule,
 		MatSidenavModule,
+		MatSnackBarModule,
 		MatTableModule,
 		MatTabsModule,
 		MatToolbarModule
-	]
+	],
+	entryComponents: [ AccountEditComponent ]
 })
 export class AppModule { }

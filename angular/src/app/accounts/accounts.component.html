@@ -2,12 +2,15 @@
 	<mat-tab label="List">
 		<div class="example-container mat-elevation-z5">
 			<mat-table #table [dataSource]="accounts">
-				<ng-container matColumnDef="Name">
+				<ng-container matColumnDef="Name" cssClassFriendlyName="col-xs-1">
 					<mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-					<mat-cell *matCellDef="let account"> {{account.Name}} </mat-cell>
+					<mat-cell *matCellDef="let account">{{account.Name}}</mat-cell>
 				</ng-container>
-					  
-				<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+				<ng-container matColumnDef="Options" cssClassFriendlyName="col-xs-1">
+						<mat-header-cell *matHeaderCellDef>Options</mat-header-cell>
+						<mat-cell *matCellDef="let account"><button (click)="OpenAccountEdit(account._id.$oid)">Testing</button></mat-cell>
+					</ng-container>
+					<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 				<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 			</mat-table>
 		</div>
