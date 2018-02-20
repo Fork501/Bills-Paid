@@ -52,6 +52,11 @@ class AccountApi(object):
 			) for account in self.mongo_client.get_all_accounts()
 		]
 
+	@view_config(route_name='apiAccountCount', request_method='GET')
+	def get_accounts_count(self):
+		"""Retrieve number of accounts"""
+		return json.dumps(self.mongo_client.get_accounts_count(), default=json_util.default)
+
 
 @view_defaults(renderer='index.html')
 class BillsPaidViews(object):

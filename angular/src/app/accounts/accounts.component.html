@@ -1,6 +1,23 @@
 <mat-tab-group>
 	<mat-tab label="List">
-		Total accounts: {{totalAccounts}}
+		<div class="example-container mat-elevation-z5">
+			<mat-table #table [dataSource]="accounts">
+				<ng-container matColumnDef="Name">
+					<mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+					<mat-cell *matCellDef="let account"> {{account.Name}} </mat-cell>
+				</ng-container>
+					  
+				<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+				<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+			</mat-table>
+		</div>
+		<div class="col col-2 offset-10" style="margin-bottom:15px;">
+			<mat-chip-list>
+				<mat-chip color="primary" class="mat-elevation-z6">
+					Total Accounts: {{totalAccounts}}
+				</mat-chip>
+			</mat-chip-list>
+		</div>
 	</mat-tab>
 	<mat-tab label="New">
 		<!-- <form> -->
