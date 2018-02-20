@@ -1,40 +1,54 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { MatTableDataSource } from '@angular/material';
 
 import { Account } from '../models/account.model'
 
 @Component({
-  selector: 'app-accounts',
-  templateUrl: './accounts.component.html',
-  styleUrls: ['./accounts.component.css']
+	selector: 'app-accounts',
+	templateUrl: './accounts.component.html',
+	styleUrls: ['./accounts.component.css']
 })
 export class AccountsComponent implements OnInit {
 
 	account = new Account();
-
+	accounts = new MatTableDataSource();
+	displayedColumns = ['Name'];
 	totalAccounts = 0;
 
 	constructor(private httpClient: HttpClient) {
-		this.account.Name = "My account";
+		this.GetAccounts();
 	}
 
-  	ngOnInit() { }
+	ngOnInit() { }
 
 	GetAccounts() {
-		this.httpClient.get('/api/account').subscribe(
+		this.httpClient.get<Account>('/api/account').subscribe(
 			data => {
-				console.log("Data");
-				console.log(data);
+				var resluts = [];
+				for(var i in data){
+					resluts.push(JSON.parse(data[i]));
+				}
+
+				this.accounts.data = resluts;
+				this.GetAccountsCount();
+			}
+		);
+	}
+
+	GetAccountsCount() {
+		this.httpClient.get('/api/account/count').subscribe(
+			data => {
 				this.totalAccounts = +data;
-      		}
+			}
 		);
 	}
 
 	SaveAccount() {
 		this.httpClient.post('/api/account', this.account).subscribe(
 			data => {
-        		console.log(data);
-      		}
+				this.GetAccounts();
+			}
 		);
 	}
 }

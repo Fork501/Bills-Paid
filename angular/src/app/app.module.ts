@@ -8,7 +8,7 @@ import { AppRoutingModule } from './/app-routing.module';
 import { BillsComponent } from './bills/bills.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatCardModule, MatDividerModule, MatInputModule, MatListModule, MatSidenavModule, MatTabsModule, MatToolbarModule } from '@angular/material';
+import { MatCardModule, MatChipsModule, MatDividerModule, MatInputModule, MatListModule, MatSidenavModule, MatTableModule, MatTabsModule, MatToolbarModule } from '@angular/material';
 import { AccountsComponent } from './accounts/accounts.component';
 import { DashboardComponent } from './dashboard/dashboard.component'
 
@@ -24,11 +24,13 @@ import { DashboardComponent } from './dashboard/dashboard.component'
 		BrowserAnimationsModule,
 		BrowserModule,
 		FormsModule,
+		MatChipsModule,
 		HttpClientModule,
 		MatCardModule,
 		MatInputModule,
 		MatListModule,
 		MatSidenavModule,
+		MatTableModule,
 		MatTabsModule,
 		MatToolbarModule
 	],
@@ -39,9 +41,11 @@ import { DashboardComponent } from './dashboard/dashboard.component'
 	exports: [
 		BrowserAnimationsModule,
 		MatCardModule,
+		MatChipsModule,
 		MatInputModule,
 		MatListModule,
 		MatSidenavModule,
+		MatTableModule,
 		MatTabsModule,
 		MatToolbarModule
 	]

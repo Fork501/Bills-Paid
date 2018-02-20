@@ -5,7 +5,8 @@ from pyramid.view import view_config
 API_ROUTES = [
 	{'route' : 'apiHome', 'path' : '/'},
 	{'route' : 'apiHello', 'path' : '/hello'},
-	{'route' : 'apiAccount', 'path' : '/account'}
+	{'route' : 'apiAccount', 'path' : '/account'},
+	{'route' : 'apiAccountCount', 'path' : '/account/count'}
 ]
 
 VIEW_ROUTES = [

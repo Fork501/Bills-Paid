@@ -15,3 +15,7 @@ class MongoClient(object):
 	def get_all_accounts(self):
 		"""Get a list of all accounts"""
 		return self.db_conn.account.find()
+
+	def get_accounts_count(self):
+		"""Get a list of all accounts"""
+		return self.db_conn.account.count()
