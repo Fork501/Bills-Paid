@@ -4,4 +4,5 @@ export class Account {
 	_id: MongoId;
 	Name: string;
 	DayOfMonth: number;
+	Active: boolean;
 }

@@ -6,7 +6,8 @@ API_ROUTES = [
 	{'route' : 'apiHome', 'path' : '/'},
 	{'route' : 'apiHello', 'path' : '/hello'},
 	{'route' : 'apiAccount', 'path' : '/account'},
-	{'route' : 'apiAccountCount', 'path' : '/account/count'}
+	{'route' : 'apiAccountCount', 'path' : '/account/count'},
+	{'route' : 'apiAccountUpdate', 'path' : '/account/{accountId}'}
 ]
 
 VIEW_ROUTES = [

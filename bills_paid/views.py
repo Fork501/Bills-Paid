@@ -38,7 +38,12 @@ class AccountApi(object):
 	def create_account(self):
 		"""Creates a new account"""
 		res = json.loads(self.request.body)
-		self.mongo_client.insert_account({'Name' : res['Name'], 'DayOfMonth' : res['DayOfMonth'] })
+		self.mongo_client.create_account(
+			{
+				'Name' : res['Name'],
+				'DayOfMonth' : res['DayOfMonth'],
+				'Active' : res['Active']
+			})
 		return {'Result' : 'Success'}
 
 	@view_config(request_method='GET')
@@ -57,6 +62,20 @@ class AccountApi(object):
 		"""Retrieve number of accounts"""
 		return json.dumps(self.mongo_client.get_accounts_count(), default=json_util.default)
 
+	@view_config(route_name='apiAccountUpdate', request_method='PUT')
+	def update_account(self):
+		"""Creates a new account"""
+		account_id = self.request.matchdict["accountId"]
+		res = json.loads(self.request.body)
+		self.mongo_client.update_account(
+			account_id,
+			{
+				'Name' : res['Name'],
+				'DayOfMonth' : res['DayOfMonth'],
+				'Active' : res['Active']
+			}
+		)
+		return {'Result' : 'Success'}
 
 @view_defaults(renderer='index.html')
 class BillsPaidViews(object):

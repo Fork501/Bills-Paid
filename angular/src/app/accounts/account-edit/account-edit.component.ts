@@ -1,18 +1,63 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http'
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { Account } from '../../models/account.model'
+import { NgForm } from '@angular/forms';
 
 @Component({
-  selector: 'app-account-edit',
-  templateUrl: './account-edit.component.html',
-  styleUrls: ['./account-edit.component.css']
+	selector: 'app-account-edit',
+	templateUrl: './account-edit.component.html',
+	styleUrls: ['./account-edit.component.css']
 })
 export class AccountEditComponent implements OnInit {
 
-	oid: string;
+	@ViewChild(NgForm) form;
 
-	constructor(@Inject(MAT_DIALOG_DATA) oid: any) {
-		this.oid = oid.oid;
+	account: Account;
+	accountActive: boolean;
+	accountDayOfMonth: number;
+	accountName: string;
+	data: any;
+
+	constructor(public dialogRef: MatDialogRef<AccountEditComponent>, @Inject(MAT_DIALOG_DATA) data: any, private httpClient: HttpClient) {
+		if(data && data.data) {
+			this.account = data.data;
+			this.accountName = this.account.Name;
+			this.accountDayOfMonth = this.account.DayOfMonth;
+			this.accountActive = this.account.Active;
+			this.data = data;
+		}
+		else
+			this.account = new Account();
 	}
 
 	ngOnInit() {}
+
+	SaveAccount() {
+		if(!this.form.valid)
+			return;
+
+		if(!this.account)
+			this.account = new Account();
+
+		this.account.Name = this.accountName;
+		this.account.DayOfMonth = this.accountDayOfMonth;
+
+		if(this.account != null && this.account._id != null && this.account._id.$oid != null && this.account._id.$oid != '')
+		{
+			this.account.Active = this.accountActive;
+			this.httpClient.put('/api/account/' + this.account._id.$oid, this.account).subscribe(
+				data => { }
+			);
+		}
+		else
+		{
+			this.account.Active = true;
+			this.httpClient.post('/api/account', this.account).subscribe(
+				data => { }
+			);
+		}
+
+		this.dialogRef.close(true);
+	}
 }

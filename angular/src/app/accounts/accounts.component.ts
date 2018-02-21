@@ -24,6 +24,10 @@ export class AccountsComponent implements OnInit {
 
 	ngOnInit() { }
 
+	DeleteAccount(oid) {
+		alert('Deleting ' + oid)
+	}
+
 	GetAccounts() {
 		this.httpClient.get<Account>('/api/account').subscribe(
 			data => {
@@ -46,16 +50,25 @@ export class AccountsComponent implements OnInit {
 		);
 	}
 
-	OpenAccountEdit(oid) {
-		this.dialog.open(AccountEditComponent, { height: '300 px', data: {oid: oid} } );
+	OpenAccountEdit(account) {
+		this.dialog.open(AccountEditComponent, { height: '300 px', data: { data: account } }).afterClosed().subscribe(
+			data => {
+				if(data)
+				{
+					this.GetAccounts();
+					this.snackbar.open('Success!', null, { duration: 2000 });
+				}
+		});
 	}
 
-	SaveAccount() {
-		this.httpClient.post('/api/account', this.account).subscribe(
+	OpenAccountNew() {
+		this.dialog.open(AccountEditComponent, { height: '300 px', data: { data: null } }).afterClosed().subscribe(
 			data => {
-				this.GetAccounts();
-				this.snackbar.open('Success!', null, { duration: 2000 });
-			}
-		);
+				if(data)
+				{
+					this.GetAccounts();
+					this.snackbar.open('Success!', null, { duration: 2000 });
+				}
+		});
 	}
 }

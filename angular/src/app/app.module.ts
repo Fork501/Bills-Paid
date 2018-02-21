@@ -9,9 +9,11 @@ import { AppRoutingModule } from './/app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
 	MatCardModule,
+	MatSlideToggleModule,
 	MatChipsModule,
 	MatDialogModule,
 	MatDividerModule,
+	MatIconModule,
 	MatInputModule,
 	MatListModule,
 	MatSidenavModule,
@@ -42,7 +44,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 		MatChipsModule,
 		HttpClientModule,
 		MatCardModule,
+		MatSlideToggleModule,
 		MatDialogModule,
+		MatIconModule,
 		MatInputModule,
 		MatListModule,
 		MatSidenavModule,
@@ -58,8 +62,10 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 	exports: [
 		BrowserAnimationsModule,
 		MatCardModule,
+		MatSlideToggleModule,
 		MatChipsModule,
 		MatDialogModule,
+		MatIconModule,
 		MatInputModule,
 		MatListModule,
 		MatSidenavModule,

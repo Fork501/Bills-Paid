@@ -1,51 +1,30 @@
-<mat-tab-group>
-	<mat-tab label="List">
-		<div class="example-container mat-elevation-z5">
-			<mat-table #table [dataSource]="accounts">
-				<ng-container matColumnDef="Name" cssClassFriendlyName="col-xs-1">
-					<mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
-					<mat-cell *matCellDef="let account">{{account.Name}}</mat-cell>
-				</ng-container>
-				<ng-container matColumnDef="Options" cssClassFriendlyName="col-xs-1">
-						<mat-header-cell *matHeaderCellDef>Options</mat-header-cell>
-						<mat-cell *matCellDef="let account"><button (click)="OpenAccountEdit(account._id.$oid)">Testing</button></mat-cell>
-					</ng-container>
-					<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-				<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-			</mat-table>
-		</div>
-		<div class="col col-2 offset-10" style="margin-bottom:15px;">
-			<mat-chip-list>
-				<mat-chip color="primary" class="mat-elevation-z6">
-					Total Accounts: {{totalAccounts}}
-				</mat-chip>
-			</mat-chip-list>
-		</div>
-	</mat-tab>
-	<mat-tab label="New">
-		<!-- <form> -->
-			<div class="container-fluid">
-				<div class="row">
-					<div class="col col-3">
-						<mat-form-field>
-							<input matInput placeholder="Account Name" [(ngModel)]="account.Name" />
-						</mat-form-field>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col col-3">
-						<mat-form-field>
-							<input matInput placeholder="Draft Day" [(ngModel)]="account.DayOfMonth" />
-							<!-- <input matInput placeholder="Draft Day" type="number" min="1" max="31" increment="1.0" ng-model="myVar" /> -->
-						</mat-form-field>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col col-12 text-center">
-						<button type="button" class="btn btn-lg btn-primary" (click)="SaveAccount()">Save</button>
-					</div>
-				</div>
-			</div>
-		<!-- </form> -->
-	</mat-tab>
-</mat-tab-group>
+<div class="header col col-12">
+	<div class="row">
+		<span class="h2">Accounts</span>
+		<span style="padding-top:5px; margin-left:8px;"><i class="fa fa-sm fa-plus-circle color-forestgreen" (click)="OpenAccountNew()"></i></span>
+	</div>
+</div>
+<div class="mat-elevation-z5">
+	<mat-table #table [dataSource]="accounts">
+		<ng-container matColumnDef="Name">
+			<mat-header-cell *matHeaderCellDef class="col col-8">Name</mat-header-cell>
+			<mat-cell *matCellDef="let account" class="col col-8">{{account.Name}}</mat-cell>
+		</ng-container>
+		<ng-container matColumnDef="Options" cssClassFriendlyName="col-xs-1">
+				<mat-header-cell *matHeaderCellDef class="col col-4"></mat-header-cell>
+				<mat-cell *matCellDef="let account" class="col col-4">
+					<span class="col"><i class="fa fa-eye fa-lg color-royalblue clickable" (click)="OpenAccountEdit(account)"></i></span>
+					<span class="col"><i class="fa fa-times fa-lg color-tomato clickable" (click)="DeleteAccount(account)"></i></span>
+				</mat-cell>
+			</ng-container>
+			<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+		<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+	</mat-table>
+</div>
+<div class="col col-2 offset-10" style="margin-bottom:15px;">
+	<mat-chip-list>
+		<mat-chip color="primary" class="mat-elevation-z6">
+			{{totalAccounts}} Account{{totalAccounts == 1 ? "" : "s"}}
+		</mat-chip>
+	</mat-chip-list>
+</div>
