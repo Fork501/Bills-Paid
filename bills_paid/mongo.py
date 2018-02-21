@@ -9,6 +9,12 @@ class MongoClient(object):
 		client = pymongo.MongoClient(MONGO_ENDPOINT)
 		self.db_conn = client.bills_paid
 
+	# BEGIN Account
+
+	def create_account(self, account):
+		"""Insert a new account"""
+		self.db_conn.account.insert(account)
+
 	def delete_account(self, account_id):
 		"""Update an existing account"""
 		self.db_conn.account.delete_one({'_id': ObjectId(account_id)})
@@ -21,10 +27,20 @@ class MongoClient(object):
 		"""Get a list of all accounts"""
 		return self.db_conn.account.count()
 
-	def create_account(self, account):
-		"""Insert a new account"""
-		self.db_conn.account.insert(account)
-
 	def update_account(self, account_id, account):
 		"""Update an existing account"""
 		self.db_conn.account.update_one({'_id': ObjectId(account_id)}, {'$set': account})
+
+	# END Account
+
+	# BEGIN Bill
+
+	def create_billing(self, billing):
+		"""Retrieve a specified billing month"""
+		self.db_conn.bills.insert(billing)
+
+	def get_billing(self, month, year):
+		"""Retrieve a specified billing month"""
+		self.db_conn.bills.find([{'Month': month}, {'Year', year}])
+
+	# END Bill

@@ -3,12 +3,14 @@ from pyramid.config import Configurator
 from pyramid.view import view_config
 
 API_ROUTES = [
-	{'route' : 'apiHome', 'path' : '/'},
-	{'route' : 'apiHello', 'path' : '/hello'},
+	# Account
 	{'route' : 'apiAccount', 'path' : '/account'},
 	{'route' : 'apiAccountCount', 'path' : '/account/count'},
 	{'route' : 'apiAccountDelete', 'path' : '/account/{accountId}'},
-	{'route' : 'apiAccountUpdate', 'path' : '/account/{accountId}'}
+	{'route' : 'apiAccountUpdate', 'path' : '/account/{accountId}'},
+
+	# Bills
+	{'route' : 'apiBillsCreate', 'path' : '/bills'}
 ]
 
 VIEW_ROUTES = [

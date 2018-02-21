@@ -24,9 +24,11 @@ class AccountApi(object):
 			})
 		return {'Result' : 'Success'}
 
+	# This needs to be updated
+	# If an account was used in a bill, it should deny deletion
 	@view_config(route_name='apiAccountDelete', request_method='DELETE')
 	def delete_account(self):
-		"""Creates a new account"""
+		"""Deletes an existing account"""
 		account_id = self.request.matchdict["accountId"]
 		self.mongo_client.delete_account(account_id)
 		return {'Result' : 'Success'}
@@ -49,7 +51,7 @@ class AccountApi(object):
 
 	@view_config(route_name='apiAccountUpdate', request_method='PUT')
 	def update_account(self):
-		"""Creates a new account"""
+		"""Updates an existing account"""
 		account_id = self.request.matchdict["accountId"]
 		res = json.loads(self.request.body)
 		self.mongo_client.update_account(
@@ -60,6 +62,27 @@ class AccountApi(object):
 				'Active' : res['Active']
 			}
 		)
+		return {'Result' : 'Success'}
+
+@view_defaults(route_name='billsPaidApi', renderer='json')
+class BillsPaidApi(object):
+	"""API methods for /billspaid"""
+	def __init__(self, request):
+		self.request = request
+		self.mongo_client = MongoClient()
+
+	@view_config(route_name="apiBillsCreate", request_method="POST")
+	def create_bill(self):
+		"""Creates a line item for a bill"""
+		res = json.loads(self.request.body)
+		billing = self.mongo_client.get_billing(res['Month'], res['Year'])
+		if billing is None:
+			self.mongo_client.create_billing(
+				{
+					'Month' : res['Month'],
+					'Year' : res['Year'],
+					'Bills' : []
+				})
 		return {'Result' : 'Success'}
 
 @view_defaults(renderer='index.html')
