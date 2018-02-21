@@ -7,6 +7,7 @@ API_ROUTES = [
 	{'route' : 'apiHello', 'path' : '/hello'},
 	{'route' : 'apiAccount', 'path' : '/account'},
 	{'route' : 'apiAccountCount', 'path' : '/account/count'},
+	{'route' : 'apiAccountDelete', 'path' : '/account/{accountId}'},
 	{'route' : 'apiAccountUpdate', 'path' : '/account/{accountId}'}
 ]
 

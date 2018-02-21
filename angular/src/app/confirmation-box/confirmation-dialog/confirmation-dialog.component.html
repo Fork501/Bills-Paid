@@ -1,0 +1,9 @@
+<mat-dialog-content>
+  {{message}}
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div class="col col-12 text-center">
+    <button mat-button mat-dialog-close cdkFocusInitial class="btn btn-danger">Cancel</button>
+    <button mat-button [mat-dialog-close]="true" class="btn btn-success">Ok</button>
+  </div>
+</mat-dialog-actions>

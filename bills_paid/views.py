@@ -5,28 +5,6 @@ from pyramid.view import view_config, view_defaults
 from bills_paid.mongo import MongoClient
 
 
-class BillsPaidApi(object):
-	"""API Routes"""
-	def __init__(self, request):
-		self.request = request
-		self.mongo_client = MongoClient()
-
-	"""
-	@view_config(route_name='apiHello', renderer='json')
-	def hello_world(self):
-		my_response = [
-			json.dumps
-			(
-				account,
-				default=json_util.default
-			) for account in self.mongo_client.get_all_accounts()
-		]
-
-		my_response = "Hello, world"
-
-		return my_response
-	"""
-
 @view_defaults(route_name='apiAccount', renderer='json')
 class AccountApi(object):
 	"""API methods for /account"""
@@ -44,6 +22,13 @@ class AccountApi(object):
 				'DayOfMonth' : res['DayOfMonth'],
 				'Active' : res['Active']
 			})
+		return {'Result' : 'Success'}
+
+	@view_config(route_name='apiAccountDelete', request_method='DELETE')
+	def delete_account(self):
+		"""Creates a new account"""
+		account_id = self.request.matchdict["accountId"]
+		self.mongo_client.delete_account(account_id)
 		return {'Result' : 'Success'}
 
 	@view_config(request_method='GET')

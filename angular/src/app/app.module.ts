@@ -27,6 +27,8 @@ import { AccountsComponent } from './accounts/accounts.component';
 import { AccountEditComponent } from './accounts/account-edit/account-edit.component';
 import { BillsComponent } from './bills/bills.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ConfirmationBox } from './confirmation-box/confirmation-box.service';
+import { ConfirmationDialogComponent } from './confirmation-box/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
 	declarations: [
@@ -34,6 +36,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 		AccountsComponent,
 		AccountEditComponent,
 		BillsComponent,
+		ConfirmationDialogComponent,
 		DashboardComponent
 	],
 	imports: [
@@ -55,7 +58,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 		MatTabsModule,
 		MatToolbarModule
 	],
-	providers: [],
+	providers: [
+		ConfirmationBox
+	],
 	bootstrap: [
 		AppComponent
 	],
@@ -74,6 +79,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 		MatTabsModule,
 		MatToolbarModule
 	],
-	entryComponents: [ AccountEditComponent ]
+	entryComponents: [
+		AccountEditComponent,
+		ConfirmationDialogComponent
+	]
 })
 export class AppModule { }
