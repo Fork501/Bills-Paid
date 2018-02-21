@@ -5,3 +5,19 @@
 body {
 	background: #FAFAFA;
 }
+
+.clickable {
+	cursor: pointer;
+}
+
+.color-forestgreen {
+	color: forestgreen;
+}
+
+.color-royalblue {
+	color: royalblue;
+}
+
+.color-tomato {
+	color: tomato;
+}

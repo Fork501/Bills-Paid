@@ -1,0 +1,39 @@
+<div class="container-fluid">
+	<form>
+		<div class="row">
+			<mat-form-field>
+				<input
+					name="name"
+					matInput
+					required
+					placeholder="Account Name"
+					[(ngModel)]="accountName" />
+			</mat-form-field>
+		</div>
+		<div class="row">
+			<mat-form-field>
+				<input
+					name="draftDay"
+					matInput
+					required
+					placeholder="Draft Day"
+					type="number"
+					min="1"
+					max="31"
+					increment="1.0"
+					[(ngModel)]="accountDayOfMonth" />
+			</mat-form-field>
+		</div>
+		<div class="row">
+			<mat-slide-toggle
+				name="active"
+				*ngIf="account.Name"
+				[(ngModel)]="accountActive">Active</mat-slide-toggle>
+		</div>
+		<div class="row">
+			<div class="col col-12 text-center">
+				<button type="submit" class="btn btn-lg btn-primary" (click)="SaveAccount()">Save</button>
+			</div>
+		</div>
+	</form>
+</div>
