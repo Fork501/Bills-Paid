@@ -11,11 +11,15 @@ import {
 	MatCardModule,
 	MatSlideToggleModule,
 	MatChipsModule,
+	MatDatepickerModule,
 	MatDialogModule,
 	MatDividerModule,
 	MatIconModule,
 	MatInputModule,
 	MatListModule,
+	MatNativeDateModule,
+	MatOptionModule,
+	MatSelectModule,
 	MatSidenavModule,
 	MatSnackBarModule,
 	MatTableModule,
@@ -29,6 +33,7 @@ import { BillsComponent } from './bills/bills.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ConfirmationBox } from './confirmation-box/confirmation-box.service';
 import { ConfirmationDialogComponent } from './confirmation-box/confirmation-dialog/confirmation-dialog.component';
+import { BillsEditComponent } from './bills/bills-edit/bills-edit.component';
 
 @NgModule({
 	declarations: [
@@ -37,7 +42,8 @@ import { ConfirmationDialogComponent } from './confirmation-box/confirmation-dia
 		AccountEditComponent,
 		BillsComponent,
 		ConfirmationDialogComponent,
-		DashboardComponent
+		DashboardComponent,
+		BillsEditComponent
 	],
 	imports: [
 		AppRoutingModule,
@@ -47,12 +53,16 @@ import { ConfirmationDialogComponent } from './confirmation-box/confirmation-dia
 		MatChipsModule,
 		HttpClientModule,
 		MatCardModule,
-		MatSlideToggleModule,
+		MatDatepickerModule,
 		MatDialogModule,
 		MatIconModule,
 		MatInputModule,
 		MatListModule,
+		MatNativeDateModule,
+		MatOptionModule,
+		MatSelectModule,
 		MatSidenavModule,
+		MatSlideToggleModule,
 		MatSnackBarModule,
 		MatTableModule,
 		MatTabsModule,
@@ -69,10 +79,14 @@ import { ConfirmationDialogComponent } from './confirmation-box/confirmation-dia
 		MatCardModule,
 		MatSlideToggleModule,
 		MatChipsModule,
+		MatDatepickerModule,
 		MatDialogModule,
 		MatIconModule,
 		MatInputModule,
 		MatListModule,
+		MatNativeDateModule,
+		MatOptionModule,
+		MatSelectModule,
 		MatSidenavModule,
 		MatSnackBarModule,
 		MatTableModule,
@@ -81,6 +95,7 @@ import { ConfirmationDialogComponent } from './confirmation-box/confirmation-dia
 	],
 	entryComponents: [
 		AccountEditComponent,
+		BillsEditComponent,
 		ConfirmationDialogComponent
 	]
 })

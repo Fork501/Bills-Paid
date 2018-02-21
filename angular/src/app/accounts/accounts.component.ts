@@ -46,14 +46,18 @@ export class AccountsComponent implements OnInit {
 		this.httpClient.get<Account>('/api/account').subscribe(
 			data => {
 				let results: Account[] = [];
-				for(var i in data){
+				for(var i in data)
 					results.push(JSON.parse(data[i]));
-				}
 
 				this.accounts.data = results;
 				this.GetAccountsCount();
 			}
 		);
+	}
+
+	GetAccountsAndShowSuccess() {
+		this.GetAccounts();
+		this.snackbar.open('Success!', null, { duration: 2000 });
 	}
 
 	GetAccountsCount() {
@@ -68,9 +72,7 @@ export class AccountsComponent implements OnInit {
 		this.dialog.open(AccountEditComponent, { height: '300 px', data: { data: account } }).afterClosed().subscribe(
 			data => {
 				if(data)
-				{
 					this.GetAccountsAndShowSuccess();
-				}
 		});
 	}
 
@@ -78,14 +80,7 @@ export class AccountsComponent implements OnInit {
 		this.dialog.open(AccountEditComponent, { height: '300 px', data: { data: null } }).afterClosed().subscribe(
 			data => {
 				if(data)
-				{
 					this.GetAccountsAndShowSuccess();
-				}
 		});
-	}
-
-	GetAccountsAndShowSuccess() {
-		this.GetAccounts();
-		this.snackbar.open('Success!', null, { duration: 2000 });
 	}
 }

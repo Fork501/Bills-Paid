@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
+import { NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Account } from '../../models/account.model'
-import { NgForm } from '@angular/forms';
 
 @Component({
 	selector: 'app-account-edit',
