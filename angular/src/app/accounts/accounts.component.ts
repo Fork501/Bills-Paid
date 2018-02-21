@@ -5,6 +5,9 @@ import { MatDialog, MatSnackBar, MatTableDataSource } from '@angular/material';
 import { Account } from '../models/account.model'
 import { AccountEditComponent } from './account-edit/account-edit.component'
 
+import { ConfirmationBox } from '../confirmation-box/confirmation-box.service'
+import { ConfirmationDialogComponent } from '../confirmation-box/confirmation-dialog/confirmation-dialog.component';
+
 @Component({
 	selector: 'app-accounts',
 	templateUrl: './accounts.component.html',
@@ -18,14 +21,25 @@ export class AccountsComponent implements OnInit {
 	displayedColumns = [ 'Name', 'Options' ];
 	totalAccounts = 0;
 
-	constructor(private httpClient: HttpClient, public dialog: MatDialog, public snackbar: MatSnackBar) {
+	constructor(
+		private httpClient: HttpClient,
+		public dialog: MatDialog,
+		public snackbar: MatSnackBar,
+		public confirmationBox: ConfirmationBox) {
 		this.GetAccounts();
 	}
 
 	ngOnInit() { }
 
-	DeleteAccount(oid) {
-		alert('Deleting ' + oid)
+	DeleteAccount(account : Account) {
+		this.confirmationBox.ShowConfirmation(`Are you sure you want to delete account ${account.Name}?`).subscribe(data => {
+			if(data)
+				this.httpClient.delete('/api/account/' + account._id.$oid).subscribe(
+					data => {
+						this.GetAccountsAndShowSuccess();
+					}
+				);
+		});
 	}
 
 	GetAccounts() {
@@ -55,8 +69,7 @@ export class AccountsComponent implements OnInit {
 			data => {
 				if(data)
 				{
-					this.GetAccounts();
-					this.snackbar.open('Success!', null, { duration: 2000 });
+					this.GetAccountsAndShowSuccess();
 				}
 		});
 	}
@@ -66,9 +79,13 @@ export class AccountsComponent implements OnInit {
 			data => {
 				if(data)
 				{
-					this.GetAccounts();
-					this.snackbar.open('Success!', null, { duration: 2000 });
+					this.GetAccountsAndShowSuccess();
 				}
 		});
+	}
+
+	GetAccountsAndShowSuccess() {
+		this.GetAccounts();
+		this.snackbar.open('Success!', null, { duration: 2000 });
 	}
 }

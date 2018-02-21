@@ -9,6 +9,10 @@ class MongoClient(object):
 		client = pymongo.MongoClient(MONGO_ENDPOINT)
 		self.db_conn = client.bills_paid
 
+	def delete_account(self, account_id):
+		"""Update an existing account"""
+		self.db_conn.account.delete_one({'_id': ObjectId(account_id)})
+
 	def get_all_accounts(self):
 		"""Get a list of all accounts"""
 		return self.db_conn.account.find().sort('Name', pymongo.ASCENDING)
