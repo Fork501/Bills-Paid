@@ -4,6 +4,7 @@ import { Message } from '../models/message.model';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { ConfirmationBox } from '../confirmation-box/confirmation-box.service';
 import { BillsEditComponent } from './bills-edit/bills-edit.component';
+import { Bill } from '../models/bill.model';
 
 @Component({
   selector: 'app-bills',
@@ -16,7 +17,7 @@ export class BillsComponent implements OnInit {
 		public snackbar: MatSnackBar,
 		public confirmationBox: ConfirmationBox) { }
 
-	bills = [];
+	bill: Bill = new Bill();
 	totalBills = 0;
 
   	ngOnInit() {
@@ -24,9 +25,14 @@ export class BillsComponent implements OnInit {
   	}
 
 	GetBills() {
-		this.httpClient.get('/api/bills/2018-02-01').subscribe(
+		this.httpClient.get<string>('/api/bills/2018-02-01').subscribe(
 			data => {
-				console.log(data);
+
+				this.bill = JSON.parse(data) as Bill;
+
+				console.log(this.bill);
+				//this.bill = JSON.parse(data);
+				//console.log(this.bill);
 			}
 		);
 	}
@@ -34,6 +40,15 @@ export class BillsComponent implements OnInit {
 	GetBillsAndShowSuccess() {
 		this.GetBills();
 		this.snackbar.open('Success!', null, { duration: 2000 });
+	}
+
+	GetDate(dateToParse) {
+		if(dateToParse && dateToParse.$date)
+		{
+			var dateToReturn = new Date(parseInt(dateToParse.$date, 10)).toLocaleDateString("en-US");
+			console.log(dateToReturn);
+			return dateToReturn;
+		}
 	}
 
 	OpenBillsNew() {

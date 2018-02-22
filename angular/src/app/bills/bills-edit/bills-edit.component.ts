@@ -44,7 +44,7 @@ export class BillsEditComponent implements OnInit {
 		if(!this.form.valid)
 			return;
 
-		this.bill.AccountId = this.billAccountId.$oid;
+		this.bill._id = this.billAccountId;
 		this.bill.Amount = this.billAmount;
 		this.bill.Date = this.billDate;
 
