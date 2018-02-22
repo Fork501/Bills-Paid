@@ -14,7 +14,8 @@ REQUIRES = [
 	'pyramid_chameleon',
 	'pyramid_debugtoolbar',
 	'pyramid_jinja2',
-	'waitress',
+	'python-dateutil',
+	'waitress'
 ]
 
 TESTS_REQUIRE = [

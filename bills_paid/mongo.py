@@ -35,12 +35,15 @@ class MongoClient(object):
 
 	# BEGIN Bill
 
-	def create_billing(self, billing):
-		"""Retrieve a specified billing month"""
-		self.db_conn.bills.insert(billing)
-
 	def get_billing(self, month, year):
 		"""Retrieve a specified billing month"""
 		self.db_conn.bills.find([{'Month': month}, {'Year', year}])
+
+	def upsert_billing(self, month, year, bill):
+		"""Retrieve a specified billing month"""
+		self.db_conn.bills.update(
+			{'Month' : month, 'Year' : year},
+			{'$push' : {'Bills' : bill}},
+			upsert = True)
 
 	# END Bill

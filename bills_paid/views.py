@@ -1,5 +1,6 @@
 """Pyramid views"""
 import json
+from dateutil import parser
 from bson import json_util
 from pyramid.view import view_config, view_defaults
 from bills_paid.mongo import MongoClient
@@ -75,14 +76,15 @@ class BillsPaidApi(object):
 	def create_bill(self):
 		"""Creates a line item for a bill"""
 		res = json.loads(self.request.body)
-		billing = self.mongo_client.get_billing(res['Month'], res['Year'])
-		if billing is None:
-			self.mongo_client.create_billing(
-				{
-					'Month' : res['Month'],
-					'Year' : res['Year'],
-					'Bills' : []
-				})
+		parsed_date = parser.parse(res["Date"])
+		self.mongo_client.upsert_billing(
+			parsed_date.month,
+			parsed_date.year,
+			{
+				"Date" : "{0}-{1}-{2}".format(parsed_date.year, parsed_date.month, parsed_date.day),
+				"Amount" : res['Amount'],
+				"AccountId" : res['AccountId']
+			})
 		return {'Result' : 'Success'}
 
 @view_defaults(renderer='index.html')
