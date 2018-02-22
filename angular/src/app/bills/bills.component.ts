@@ -20,12 +20,15 @@ export class BillsComponent implements OnInit {
 	totalBills = 0;
 
   	ngOnInit() {
+		this.GetBills();
   	}
 
 	GetBills() {
-		/*this.httpClient.get('/api/bills').subscribe(
-			data => { }
-		);*/
+		this.httpClient.get('/api/bills/2018-02-01').subscribe(
+			data => {
+				console.log(data);
+			}
+		);
 	}
 
 	GetBillsAndShowSuccess() {

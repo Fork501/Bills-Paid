@@ -88,7 +88,7 @@ class BillsPaidApi(object):
 		"""
 		date = self.request.matchdict["date"]
 		date_parsed = parser.parse(date)
-		return self.mongo_client.get_billing_month(date_parsed.month, date_parsed.year)
+		return json_util.dumps(self.mongo_client.get_billing_month(date_parsed.month, date_parsed.year))
 
 @view_defaults(renderer='index.html')
 class BillsPaidViews(object):

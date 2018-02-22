@@ -39,7 +39,7 @@ class MongoClient(object):
 
 	def get_billing_month(self, month, year):
 		"""Retrieve a specified billing month"""
-		self.db_conn.bills.find([{'Month': month}, {'Year', year}])
+		return self.db_conn.bills.find_one({'BillingMonth': datetime(year, month, 1)})
 
 	def upsert_billing(self, date, amount, account_id):
 		"""Retrieve a specified billing month"""

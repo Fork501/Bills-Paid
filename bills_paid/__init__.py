@@ -11,7 +11,7 @@ API_ROUTES = [
 
 	# Bills
 	{'route' : 'apiBillsCreate', 'path' : '/bills'},
-	{'route' : 'apiBillsGetMonth', 'path' : '/bills'}
+	{'route' : 'apiBillsGetMonth', 'path' : '/bills/{date}'}
 ]
 
 VIEW_ROUTES = [
