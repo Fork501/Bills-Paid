@@ -10,7 +10,8 @@ API_ROUTES = [
 	{'route' : 'apiAccountUpdate', 'path' : '/account/{accountId}'},
 
 	# Bills
-	{'route' : 'apiBillsCreate', 'path' : '/bills'}
+	{'route' : 'apiBillsCreate', 'path' : '/bills'},
+	{'route' : 'apiBillsGetMonth', 'path' : '/bills'}
 ]
 
 VIEW_ROUTES = [

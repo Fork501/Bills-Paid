@@ -76,16 +76,19 @@ class BillsPaidApi(object):
 	def create_bill(self):
 		"""Creates a line item for a bill"""
 		res = json.loads(self.request.body)
-		parsed_date = parser.parse(res["Date"])
-		self.mongo_client.upsert_billing(
-			parsed_date.month,
-			parsed_date.year,
-			{
-				"Date" : "{0}-{1}-{2}".format(parsed_date.year, parsed_date.month, parsed_date.day),
-				"Amount" : res['Amount'],
-				"AccountId" : res['AccountId']
-			})
+		self.mongo_client.upsert_billing(res["Date"], res['Amount'], res['AccountId'])
 		return {'Result' : 'Success'}
+
+	@view_config(route_name='apiBillsGetMonth', request_method='GET')
+	def get_billing_month(self):
+		"""
+			Retrieve bills for a specific month
+			URL Input: /{date}: Any date within the month
+			Output: The full month object
+		"""
+		date = self.request.matchdict["date"]
+		date_parsed = parser.parse(date)
+		return self.mongo_client.get_billing_month(date_parsed.month, date_parsed.year)
 
 @view_defaults(renderer='index.html')
 class BillsPaidViews(object):
