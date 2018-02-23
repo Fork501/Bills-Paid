@@ -27,7 +27,6 @@ export class BillsComponent implements OnInit {
 	GetBills() {
 		this.httpClient.get<string>('/api/bills/2018-02-01').subscribe(
 			data => {
-				console.log(data);
 				this.bill = JSON.parse(data) as Bill;
 
 				if(!this.bill)
@@ -41,12 +40,10 @@ export class BillsComponent implements OnInit {
 		this.snackbar.open('Success!', null, { duration: 2000 });
 	}
 
-	GetDateFromMilliseconds(dateToParse) {
-		console.log(dateToParse);
+	GetDateStringFromAPIDateObject(dateToParse) {
 		if(dateToParse && dateToParse.$date)
 		{
-			var dateToReturn = new Date(parseInt(dateToParse.$date, 10)).toLocaleDateString("en-US");
-			console.log(dateToReturn);
+			var dateToReturn = new Date(dateToParse.$date).toLocaleDateString("en-US");
 			return dateToReturn;
 		}
 	}

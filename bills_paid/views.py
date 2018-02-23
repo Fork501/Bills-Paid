@@ -2,6 +2,7 @@
 import json
 from dateutil import parser
 from bson import json_util
+from bson.json_util import JSONOptions
 from pyramid.view import view_config, view_defaults
 from bills_paid.mongo import MongoClient
 
@@ -89,10 +90,8 @@ class BillsPaidApi(object):
 		date = self.request.matchdict["date"]
 		date_parsed = parser.parse(date)
 		res = self.mongo_client.get_billing_month(date_parsed.month, date_parsed.year)
-
-		res = json_util.dumps(res)
-		print res
-		return res
+		options = JSONOptions(datetime_representation=json_util.DatetimeRepresentation.ISO8601)
+		return json_util.dumps(res, json_options=options)
 
 @view_defaults(renderer='index.html')
 class BillsPaidViews(object):
