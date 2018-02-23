@@ -27,8 +27,11 @@ export class BillsComponent implements OnInit {
 	GetBills() {
 		this.httpClient.get<string>('/api/bills/2018-02-01').subscribe(
 			data => {
-
+				console.log(this.bill);
 				this.bill = JSON.parse(data) as Bill;
+
+				if(!this.bill)
+					this.bill = new Bill();
 
 				console.log(this.bill);
 				//this.bill = JSON.parse(data);
