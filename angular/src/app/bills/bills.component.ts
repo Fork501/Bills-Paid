@@ -43,7 +43,7 @@ export class BillsComponent implements OnInit {
 	GetDateStringFromAPIDateObject(dateToParse) {
 		if(dateToParse && dateToParse.$date)
 		{
-			var dateToReturn = new Date(dateToParse.$date).toLocaleDateString("en-US");
+			var dateToReturn = new Date(dateToParse.$date).toLocaleDateString("en-US", { timeZone: 'UTC' });
 			return dateToReturn;
 		}
 	}
