@@ -1,14 +1,16 @@
 """Mongo implementation"""
-import pymongo
-from dateutil import parser
-from bson.objectid import ObjectId
-from bills_paid.settings import MONGO_ENDPOINT
 from datetime import datetime
+from dateutil import parser
+from bson.codec_options import CodecOptions
+from bson.objectid import ObjectId
+import pymongo
+
+from bills_paid.settings import MONGO_ENDPOINT
 
 class MongoClient(object):
 	"""Mongo client manager"""
 	def __init__(self):
-		client = pymongo.MongoClient(MONGO_ENDPOINT)
+		client = pymongo.MongoClient(MONGO_ENDPOINT, tz_aware=False)
 		self.db_conn = client.bills_paid
 
 	# BEGIN Account
@@ -41,7 +43,7 @@ class MongoClient(object):
 		"""Retrieve a specified billing month"""
 		return self.db_conn.bills.find_one({'BillingMonth': datetime(year, month, 1)})
 
-	def upsert_billing(self, date, amount, account_id):
+	def update_billing(self, date, amount, account_id, upsert=True):
 		"""Retrieve a specified billing month"""
 		parsed_date = parser.parse(date)
 		self.db_conn.bills.update(
@@ -57,6 +59,6 @@ class MongoClient(object):
 					}
 				}
 			},
-			upsert = True)
+			upsert=upsert)
 
 	# END Bill
