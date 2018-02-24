@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 
 import { Account } from '../../models/account.model'
 import { Bill } from '../../models/bill.model'
 import { MongoId } from '../../models/mongo-id.model';
+import { AccountEditComponent } from '../../accounts/account-edit/account-edit.component';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
 	selector: 'app-bills-edit',
@@ -20,12 +22,23 @@ export class BillsEditComponent implements OnInit {
 	billAccountId: MongoId;
 	billAmount: number;
 	billDate: Date;
+	billId: MongoId;
 
-	constructor(private httpClient: HttpClient) { }
+	constructor(public dialogRef: MatDialogRef<AccountEditComponent>, @Inject(MAT_DIALOG_DATA) data: any, private httpClient: HttpClient) {
+		if(data && data.data) {
+			console.log(data.data);
+			this.bill = data.data;
+			this.billAccountId = this.bill.AccountId;
+			this.billAmount = this.bill.Amount;
+			this.billDate = this.GetDateFromAPIDateObject(this.bill.Date);
+			this.billId = this.bill._id;
+		}
+		else
+			this.bill = new Bill();
+	}
 
 	ngOnInit() {
 		this.GetAccounts();
-		this.bill = new Bill();
 	}
 
 	GetAccounts() {
@@ -40,17 +53,26 @@ export class BillsEditComponent implements OnInit {
 		);
 	}
 
+	GetDateFromAPIDateObject(dateToParse) : Date {
+		if(dateToParse && dateToParse.$date)
+		{
+			var dateToReturn = new Date(dateToParse.$date).toLocaleDateString("en-US", { timeZone: 'UTC' });
+			return new Date(dateToReturn);
+		}
+	}
+
 	SaveBill() {
 		if(!this.form.valid)
 			return;
 
-		this.bill._id = this.billAccountId;
+		this.bill.AccountId = this.billAccountId;
 		this.bill.Amount = this.billAmount;
 		this.bill.Date = this.billDate;
+		this.bill._id = this.billId;
 
 		this.httpClient.post('/api/bills', this.bill).subscribe(
 			data => {
-				console.log(data);
+				this.dialogRef.close(true);				
 			}
 		);
 	}

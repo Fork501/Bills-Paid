@@ -17,7 +17,6 @@ export class AccountEditComponent implements OnInit {
 	accountActive: boolean;
 	accountDayOfMonth: number;
 	accountName: string;
-	data: any;
 
 	constructor(public dialogRef: MatDialogRef<AccountEditComponent>, @Inject(MAT_DIALOG_DATA) data: any, private httpClient: HttpClient) {
 		if(data && data.data) {
@@ -25,7 +24,6 @@ export class AccountEditComponent implements OnInit {
 			this.accountName = this.account.Name;
 			this.accountDayOfMonth = this.account.DayOfMonth;
 			this.accountActive = this.account.Active;
-			this.data = data;
 		}
 		else
 			this.account = new Account();

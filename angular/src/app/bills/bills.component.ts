@@ -5,6 +5,7 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 import { ConfirmationBox } from '../confirmation-box/confirmation-box.service';
 import { BillsEditComponent } from './bills-edit/bills-edit.component';
 import { Bill } from '../models/bill.model';
+import { BillMonth } from '../models/billMonth.model';
 
 @Component({
   selector: 'app-bills',
@@ -17,8 +18,10 @@ export class BillsComponent implements OnInit {
 		public snackbar: MatSnackBar,
 		public confirmationBox: ConfirmationBox) { }
 
-	bill: Bill = new Bill();
+	billMonth: BillMonth = new BillMonth();
 	totalBills = 0;
+
+	displayedColumns = [ 'Account', 'Date', 'Amount', 'Options' ];
 
   	ngOnInit() {
 		this.GetBills();
@@ -27,10 +30,13 @@ export class BillsComponent implements OnInit {
 	GetBills() {
 		this.httpClient.get<string>('/api/bills/2018-02-01').subscribe(
 			data => {
-				this.bill = JSON.parse(data) as Bill;
+				this.billMonth = JSON.parse(data) as BillMonth;
 
-				if(!this.bill)
-					this.bill = new Bill();
+				if(!this.billMonth)
+					this.billMonth = new BillMonth();
+
+				if(this.billMonth.Bills)
+					this.totalBills = this.billMonth.Bills.length;
 			}
 		);
 	}
@@ -48,7 +54,28 @@ export class BillsComponent implements OnInit {
 		}
 	}
 
-	OpenBillsNew() {
+	GetDollarString(money) {
+		return "$" + <string>parseFloat(money).toFixed(2)
+	}
+
+	GetHeaderDateString (dateToParse) {
+		if(dateToParse && dateToParse.$date)
+		{
+			var date = new Date(dateToParse.$date);
+    		var formattedHeader = date.toLocaleString('en-us', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+			return formattedHeader;
+		}
+	}
+
+	OpenBillEdit(bill) {
+		this.dialog.open(BillsEditComponent, { height: '300 px', data: { data: bill } }).afterClosed().subscribe(
+			data => {
+				if(data)
+					this.GetBillsAndShowSuccess();
+		});
+	}
+
+	OpenBillNew() {
 		this.dialog.open(BillsEditComponent, { height: '300 px', data: { data: null } }).afterClosed().subscribe(
 			data => {
 				if(data)

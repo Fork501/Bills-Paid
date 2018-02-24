@@ -53,7 +53,8 @@ class MongoClient(object):
 				{
 					'Bills' :
 					{
-						"_id" : ObjectId(account_id['$oid']),
+						"_id" : ObjectId(),
+						"AccountId" : ObjectId(account_id['$oid']),
 						"Date" : datetime(parsed_date.year, parsed_date.month, parsed_date.day),
 						"Amount" : amount
 					}

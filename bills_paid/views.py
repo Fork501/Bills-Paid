@@ -2,7 +2,7 @@
 import json
 from dateutil import parser
 from bson import json_util
-from bson.json_util import JSONOptions
+from bson.json_util import JSONOptions, ObjectId
 from pyramid.view import view_config, view_defaults
 from bills_paid.mongo import MongoClient
 
@@ -77,7 +77,7 @@ class BillsPaidApi(object):
 	def create_bill(self):
 		"""Creates a line item for a bill"""
 		res = json.loads(self.request.body)
-		self.mongo_client.update_billing(res["Date"], res['Amount'], res['_id'])
+		self.mongo_client.update_billing(res["Date"], res['Amount'], res['AccountId'])
 		return {'Result' : 'Success'}
 
 	@view_config(route_name='apiBillsGetMonth', request_method='GET')
@@ -89,9 +89,19 @@ class BillsPaidApi(object):
 		"""
 		date = self.request.matchdict["date"]
 		date_parsed = parser.parse(date)
-		res = self.mongo_client.get_billing_month(date_parsed.month, date_parsed.year)
+		billing_month = self.mongo_client.get_billing_month(date_parsed.month, date_parsed.year)
 		options = JSONOptions(datetime_representation=json_util.DatetimeRepresentation.ISO8601)
-		return json_util.dumps(res, json_options=options)
+
+		accounts = self.mongo_client.get_all_accounts()
+		accounts_list = {}
+		for account in accounts:
+			accounts_list[account['_id']] = account['Name']
+
+		if billing_month:
+			for bill in billing_month['Bills']:
+				bill['AccountName'] = accounts_list[bill['AccountId']]
+
+		return json_util.dumps(billing_month, json_options=options)
 
 @view_defaults(renderer='index.html')
 class BillsPaidViews(object):

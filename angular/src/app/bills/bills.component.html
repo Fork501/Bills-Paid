@@ -1,26 +1,34 @@
 <div class="header col col-12">
 	<div class="row">
 		<span class="h2">Bills</span>
-		<span style="padding-top:5px; margin-left:8px;"><i class="fa fa-sm fa-plus-circle color-forestgreen" (click)="OpenBillsNew()"></i></span>
+		<span style="padding-top:5px; margin-left:8px;"><i class="fa fa-sm fa-plus-circle color-forestgreen" (click)="OpenBillNew()"></i></span>
 	</div>
 </div>
 <div class="mat-elevation-z5">
-	X: {{GetDateStringFromAPIDateObject(bill.BillingMonth)}}
-	<!-- <mat-table #table [dataSource]="bills">
-		<ng-container matColumnDef="Name">
-			<mat-header-cell *matHeaderCellDef class="col col-8">Name</mat-header-cell>
-			<mat-cell *matCellDef="let account" class="col col-8">{{account.Name}}</mat-cell>
+	{{GetHeaderDateString(billMonth.BillingMonth)}}
+	<mat-table #table [dataSource]="billMonth.Bills">
+		<ng-container matColumnDef="Account">
+			<mat-header-cell *matHeaderCellDef class="col col-3">Account</mat-header-cell>
+			<mat-cell *matCellDef="let bill" class="col col-2">{{bill.AccountName}}</mat-cell>
+		</ng-container>
+			<ng-container matColumnDef="Date">
+			<mat-header-cell *matHeaderCellDef class="col col-2">Date</mat-header-cell>
+			<mat-cell *matCellDef="let bill" class="col col-2">{{GetDateStringFromAPIDateObject(bill.Date)}}</mat-cell>
+		</ng-container>
+		<ng-container matColumnDef="Amount">
+			<mat-header-cell *matHeaderCellDef class="col col-2">Amount</mat-header-cell>
+			<mat-cell *matCellDef="let bill" class="col col-2">{{GetDollarString(bill.Amount)}}</mat-cell>
 		</ng-container>
 		<ng-container matColumnDef="Options" cssClassFriendlyName="col-xs-1">
-				<mat-header-cell *matHeaderCellDef class="col col-4"></mat-header-cell>
-				<mat-cell *matCellDef="let account" class="col col-4">
-					<span class="col"><i class="fa fa-eye fa-lg color-royalblue clickable" (click)="OpenAccountEdit(account)"></i></span>
-					<span class="col"><i class="fa fa-times fa-lg color-tomato clickable" (click)="DeleteAccount(account)"></i></span>
-				</mat-cell>
-			</ng-container>
-			<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+			<mat-header-cell *matHeaderCellDef class="col col-4"></mat-header-cell>
+			<mat-cell *matCellDef="let bill" class="col col-4">
+				<span class="col"><i class="fa fa-eye fa-lg color-royalblue clickable" (click)="OpenBillEdit(bill)"></i></span>
+				<!-- <span class="col"><i class="fa fa-times fa-lg color-tomato clickable" (click)="DeleteBill(bill)"></i></span> -->
+			</mat-cell>
+		</ng-container>
+		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 		<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-	</mat-table> -->
+	</mat-table>
 </div>
 <div class="col col-2 offset-10" style="margin-bottom:15px;">
 	<mat-chip-list>
