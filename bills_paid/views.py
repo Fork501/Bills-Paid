@@ -77,7 +77,7 @@ class BillsPaidApi(object):
 	def create_bill(self):
 		"""Creates a line item for a bill"""
 		res = json.loads(self.request.body)
-		self.mongo_client.update_billing(res["Date"], res['Amount'], res['AccountId'])
+		self.mongo_client.create_bill(res["Date"], res['Amount'], res['AccountId'])
 		return {'Result' : 'Success'}
 
 	@view_config(route_name='apiBillsGetMonth', request_method='GET')
@@ -102,6 +102,18 @@ class BillsPaidApi(object):
 				bill['AccountName'] = accounts_list[bill['AccountId']]
 
 		return json_util.dumps(billing_month, json_options=options)
+
+	@view_config(route_name="apiBillsUpdate", request_method="PUT")
+	def update_bill(self):
+		"""Creates and updates a line item for a bill"""
+		res = json.loads(self.request.body)
+		self.mongo_client.update_bill(
+			res["Date"],
+			res['Amount'],
+			res['AccountId'],
+			res['_id'],
+			self.request.matchdict['billId'])
+		return {'Result' : 'Success'}
 
 @view_defaults(renderer='index.html')
 class BillsPaidViews(object):

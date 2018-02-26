@@ -26,7 +26,6 @@ export class BillsEditComponent implements OnInit {
 
 	constructor(public dialogRef: MatDialogRef<AccountEditComponent>, @Inject(MAT_DIALOG_DATA) data: any, private httpClient: HttpClient) {
 		if(data && data.data) {
-			console.log(data.data);
 			this.bill = data.data;
 			this.billAccountId = this.bill.AccountId;
 			this.billAmount = this.bill.Amount;
@@ -34,7 +33,9 @@ export class BillsEditComponent implements OnInit {
 			this.billId = this.bill._id;
 		}
 		else
+		{
 			this.bill = new Bill();
+		}
 	}
 
 	ngOnInit() {
@@ -70,10 +71,21 @@ export class BillsEditComponent implements OnInit {
 		this.bill.Date = this.billDate;
 		this.bill._id = this.billId;
 
-		this.httpClient.post('/api/bills', this.bill).subscribe(
-			data => {
-				this.dialogRef.close(true);				
-			}
-		);
+		if(!this.bill._id)
+		{
+			this.httpClient.post('/api/bills', this.bill).subscribe(
+				data => {
+					this.dialogRef.close(true);				
+				}
+			);
+		}
+		else
+		{
+			this.httpClient.put('/api/bills/' + this.bill._id.$oid, this.bill).subscribe(
+				data => {
+					this.dialogRef.close(true);				
+				}
+			);
+		}
 	}
 }

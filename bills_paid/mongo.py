@@ -43,9 +43,10 @@ class MongoClient(object):
 		"""Retrieve a specified billing month"""
 		return self.db_conn.bills.find_one({'BillingMonth': datetime(year, month, 1)})
 
-	def update_billing(self, date, amount, account_id, upsert=True):
+	def create_bill(self, date, amount, account_id):
 		"""Retrieve a specified billing month"""
 		parsed_date = parser.parse(date)
+
 		self.db_conn.bills.update(
 			{'BillingMonth' : datetime(parsed_date.year, parsed_date.month, 1)},
 			{
@@ -60,6 +61,34 @@ class MongoClient(object):
 					}
 				}
 			},
-			upsert=upsert)
+			upsert=True)
+
+	def update_bill(self, date, amount, account_id, bill_id, _id):
+		"""Retrieve a specified billing month"""
+		_id = ObjectId(_id)
+		account_id = ObjectId(account_id['$oid'])
+		bill_id = ObjectId(bill_id['$oid'])
+
+		parsed_date = parser.parse(date)
+		parsed_date = datetime(parsed_date.year, parsed_date.month, parsed_date.day)
+
+		self.db_conn.bills.update(
+			{
+				'BillingMonth' : datetime(parsed_date.year, parsed_date.month, 1),
+				'Bills._id' : _id
+			},
+			{
+				'$set' :
+				{
+					'Bills.$' :
+					{
+						"_id" : bill_id,
+						"AccountId" : account_id,
+						"Date" : parsed_date,
+						"Amount" : amount
+					}
+				}
+			},
+			upsert=False)
 
 	# END Bill
