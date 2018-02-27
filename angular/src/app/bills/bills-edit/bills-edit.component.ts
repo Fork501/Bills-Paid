@@ -19,7 +19,7 @@ export class BillsEditComponent implements OnInit {
 
 	accounts: Account[] = [];
 	bill: Bill;
-	billAccountId: MongoId;
+	billAccountId: string;
 	billAmount: number;
 	billDate: Date;
 	billId: MongoId;
@@ -27,7 +27,7 @@ export class BillsEditComponent implements OnInit {
 	constructor(public dialogRef: MatDialogRef<AccountEditComponent>, @Inject(MAT_DIALOG_DATA) data: any, private httpClient: HttpClient) {
 		if(data && data.data) {
 			this.bill = data.data;
-			this.billAccountId = this.bill.AccountId;
+			this.billAccountId = this.bill.AccountId.$oid;
 			this.billAmount = this.bill.Amount;
 			this.billDate = this.GetDateFromAPIDateObject(this.bill.Date);
 			this.billId = this.bill._id;
@@ -35,6 +35,7 @@ export class BillsEditComponent implements OnInit {
 		else
 		{
 			this.bill = new Bill();
+			this.bill.AccountId = new MongoId();
 		}
 	}
 
@@ -60,20 +61,23 @@ export class BillsEditComponent implements OnInit {
 			var dateToReturn = new Date(dateToParse.$date).toLocaleDateString("en-US", { timeZone: 'UTC' });
 			return new Date(dateToReturn);
 		}
+		return dateToParse;
 	}
 
 	SaveBill() {
 		if(!this.form.valid)
 			return;
 
-		this.bill.AccountId = this.billAccountId;
-		this.bill.Amount = this.billAmount;
-		this.bill.Date = this.billDate;
-		this.bill._id = this.billId;
+		let billToSave = new Bill();
+		billToSave._id = this.billId;
+		billToSave.AccountId = new MongoId();
+		billToSave.AccountId.$oid = this.billAccountId;
+		billToSave.Amount = this.billAmount;
+		billToSave.Date = new Date(this.billDate);
 
-		if(!this.bill._id)
+		if(!billToSave._id)
 		{
-			this.httpClient.post('/api/bills', this.bill).subscribe(
+			this.httpClient.post('/api/bills', billToSave).subscribe(
 				data => {
 					this.dialogRef.close(true);				
 				}
@@ -81,7 +85,7 @@ export class BillsEditComponent implements OnInit {
 		}
 		else
 		{
-			this.httpClient.put('/api/bills/' + this.bill._id.$oid, this.bill).subscribe(
+			this.httpClient.put('/api/bills/' + billToSave._id.$oid, billToSave).subscribe(
 				data => {
 					this.dialogRef.close(true);				
 				}

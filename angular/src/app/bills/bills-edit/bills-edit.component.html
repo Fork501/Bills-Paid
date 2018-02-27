@@ -15,13 +15,14 @@
 			</mat-form-field>
 		</div>
 		<div class="row">
+			{{billAccountId.$oid}}
 			<mat-form-field>
 				<mat-select
 					name="account"
 					required
 					placeholder="Account"
 					[(ngModel)]="billAccountId">
-					<mat-option *ngFor="let account of accounts" [value]="account._id">
+					<mat-option *ngFor="let account of accounts" [value]="account._id.$oid">
 						{{ account.Name }}
 					</mat-option>
 				</mat-select>
