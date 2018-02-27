@@ -6,11 +6,13 @@ API_ROUTES = [
 	# Account
 	{'route' : 'apiAccount', 'path' : '/account', 'request_method' : 'GET'},
 	{'route' : 'apiAccountCount', 'path' : '/account/count', 'request_method' : 'GET'},
+	{'route' : 'apiAccountCreate', 'path' : '/account', 'request_method' : 'POST'},
 	{'route' : 'apiAccountDelete', 'path' : '/account/{accountId}', 'request_method' : 'DELETE'},
 	{'route' : 'apiAccountUpdate', 'path' : '/account/{accountId}', 'request_method' : 'PUT'},
 
 	# Bills
 	{'route' : 'apiBillsCreate', 'path' : '/bills', 'request_method' : 'POST'},
+	{'route' : 'apiBillsDelete', 'path' : '/bills/{billId}', 'request_method' : 'DELETE'},
 	{'route' : 'apiBillsGetMonth', 'path' : '/bills/{date}', 'request_method' : 'GET'},
 	{'route' : 'apiBillsUpdate', 'path' : '/bills/{billId}', 'request_method' : 'PUT'}
 ]

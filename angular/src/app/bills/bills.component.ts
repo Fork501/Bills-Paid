@@ -27,6 +27,19 @@ export class BillsComponent implements OnInit {
 		this.GetBills();
   	}
 
+	DeleteBill(bill) {
+		let dateString = this.GetDateStringFromAPIDateObject(bill.Date);
+		this.confirmationBox.ShowConfirmation(
+			`Are you sure you want to delete bill for ${bill.AccountName} on ${dateString}?`
+		).subscribe(data => {
+			if(data)
+				this.httpClient.delete('/api/bills/' + bill._id.$oid).subscribe(
+					data => {
+						this.GetBillsAndShowSuccess();
+					}
+				);
+		});
+	}
 	GetBills() {
 		this.httpClient.get<string>('/api/bills/2018-02-01').subscribe(
 			data => {
@@ -49,7 +62,7 @@ export class BillsComponent implements OnInit {
 	GetDateStringFromAPIDateObject(dateToParse) {
 		if(dateToParse && dateToParse.$date)
 		{
-			var dateToReturn = new Date(dateToParse.$date).toLocaleDateString("en-US", { timeZone: 'UTC' });
+			let dateToReturn = new Date(dateToParse.$date).toLocaleDateString("en-US", { timeZone: 'UTC' });
 			return dateToReturn;
 		}
 	}
@@ -61,8 +74,8 @@ export class BillsComponent implements OnInit {
 	GetHeaderDateString (dateToParse) {
 		if(dateToParse && dateToParse.$date)
 		{
-			var date = new Date(dateToParse.$date);
-    		var formattedHeader = date.toLocaleString('en-us', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+			let date = new Date(dateToParse.$date);
+    		let formattedHeader = date.toLocaleString('en-us', { month: 'long', year: 'numeric', timeZone: 'UTC' });
 			return formattedHeader;
 		}
 	}

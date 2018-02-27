@@ -14,7 +14,7 @@ class AccountApi(object):
 		self.request = request
 		self.mongo_client = MongoClient()
 
-	@view_config(request_method='POST')
+	@view_config(route_name='apiAccountCreate', request_method='POST')
 	def create_account(self):
 		"""Creates a new account"""
 		res = json.loads(self.request.body)
@@ -78,6 +78,13 @@ class BillsPaidApi(object):
 		"""Creates a line item for a bill"""
 		res = json.loads(self.request.body)
 		self.mongo_client.create_bill(res["Date"], res['Amount'], res['AccountId'])
+		return {'Result' : 'Success'}
+
+	@view_config(route_name='apiBillsDelete', request_method='DELETE')
+	def delete_bill(self):
+		"""Deletes an existing account"""
+		bill_id = self.request.matchdict["billId"]
+		self.mongo_client.delete_bill(bill_id)
 		return {'Result' : 'Success'}
 
 	@view_config(route_name='apiBillsGetMonth', request_method='GET')

@@ -20,7 +20,7 @@ class MongoClient(object):
 
 	def delete_account(self, account_id):
 		"""Update an existing account"""
-		self.db_conn.account.delete_one({'_id': ObjectId(account_id)})
+		self.db_conn.account.delete_one({'_id' : ObjectId(account_id)})
 
 	def get_all_accounts(self):
 		"""Get a list of all accounts"""
@@ -32,7 +32,7 @@ class MongoClient(object):
 
 	def update_account(self, account_id, account):
 		"""Update an existing account"""
-		self.db_conn.account.update_one({'_id': ObjectId(account_id)}, {'$set': account})
+		self.db_conn.account.update_one({'_id' : ObjectId(account_id)}, {'$set' : account})
 
 	# END Account
 
@@ -40,7 +40,7 @@ class MongoClient(object):
 
 	def get_billing_month(self, month, year):
 		"""Retrieve a specified billing month"""
-		return self.db_conn.bills.find_one({'BillingMonth': datetime(year, month, 1)})
+		return self.db_conn.bills.find_one({'BillingMonth' : datetime(year, month, 1)})
 
 	def create_bill(self, date, amount, account_id):
 		"""Retrieve a specified billing month"""
@@ -53,20 +53,32 @@ class MongoClient(object):
 				{
 					'Bills' :
 					{
-						"$each" :
+						'$each' :
 						[
 							{
-								"_id" : ObjectId(),
-								"AccountId" : ObjectId(account_id['$oid']),
-								"Date" : datetime(parsed_date.year, parsed_date.month, parsed_date.day),
-								"Amount" : amount
+								'_id' : ObjectId(),
+								'AccountId' : ObjectId(account_id['$oid']),
+								'Date' : datetime(parsed_date.year, parsed_date.month, parsed_date.day),
+								'Amount' : amount
 							}
 						],
-						"$sort" : {"Date" : 1}
+						'$sort' : {'Date' : 1}
 					}
 				}
 			},
 			upsert=True)
+
+	def delete_bill(self, bill_id):
+		"""Update an existing account"""
+		self.db_conn.bills.update(
+			{'Bills._id' : ObjectId(bill_id)},
+			{
+				'$pull' :
+				{
+					'Bills' : {'_id' : ObjectId(bill_id)}
+				}
+			}
+		)
 
 	def update_bill(self, date, amount, account_id, bill_id, _id):
 		"""Retrieve a specified billing month"""
@@ -87,10 +99,10 @@ class MongoClient(object):
 				{
 					'Bills.$' :
 					{
-						"_id" : bill_id,
-						"AccountId" : account_id,
-						"Date" : parsed_date,
-						"Amount" : amount
+						'_id' : bill_id,
+						'AccountId' : account_id,
+						'Date' : parsed_date,
+						'Amount' : amount
 					}
 				}
 			},

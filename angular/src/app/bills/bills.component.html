@@ -23,7 +23,7 @@
 			<mat-header-cell *matHeaderCellDef class="col col-4"></mat-header-cell>
 			<mat-cell *matCellDef="let bill" class="col col-4">
 				<span class="col"><i class="fa fa-eye fa-lg color-royalblue clickable" (click)="OpenBillEdit(bill)"></i></span>
-				<!-- <span class="col"><i class="fa fa-times fa-lg color-tomato clickable" (click)="DeleteBill(bill)"></i></span> -->
+				<span class="col"><i class="fa fa-times fa-lg color-tomato clickable" (click)="DeleteBill(bill)"></i></span>
 			</mat-cell>
 		</ng-container>
 		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
