@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
+import { NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Account } from '../../models/account.model'
-import { NgForm } from '@angular/forms';
 
 @Component({
 	selector: 'app-account-edit',
@@ -17,7 +17,6 @@ export class AccountEditComponent implements OnInit {
 	accountActive: boolean;
 	accountDayOfMonth: number;
 	accountName: string;
-	data: any;
 
 	constructor(public dialogRef: MatDialogRef<AccountEditComponent>, @Inject(MAT_DIALOG_DATA) data: any, private httpClient: HttpClient) {
 		if(data && data.data) {
@@ -25,7 +24,6 @@ export class AccountEditComponent implements OnInit {
 			this.accountName = this.account.Name;
 			this.accountDayOfMonth = this.account.DayOfMonth;
 			this.accountActive = this.account.Active;
-			this.data = data;
 		}
 		else
 			this.account = new Account();

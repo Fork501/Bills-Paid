@@ -1,0 +1,49 @@
+<div class="container-fluid">
+	<form>
+		<div class="row">
+			<mat-form-field>
+				<input
+					name="date"
+					matInput
+					required
+					readonly
+					[matDatepicker]="picker"
+					placeholder="Bill date"
+					[(ngModel)]="billDate">
+				<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+				<mat-datepicker #picker disabled="false"></mat-datepicker>
+			</mat-form-field>
+		</div>
+		<div class="row">
+			<mat-form-field>
+				<mat-select
+					name="account"
+					required
+					placeholder="Account"
+					[(ngModel)]="billAccountId">
+					<mat-option *ngFor="let account of accounts" [value]="account._id.$oid">
+						{{ account.Name }}
+					</mat-option>
+				</mat-select>
+			</mat-form-field>
+		</div>
+		<div class="row">
+			<mat-form-field>
+				<input
+					name="amount"
+					matInput
+					required
+					placeholder="Amount Paid"
+					type="number"
+					min="0"
+					step="0.01"
+					[(ngModel)]="billAmount" />
+			</mat-form-field>
+		</div>
+		<div class="row">
+			<div class="col col-12 text-center">
+				<button type="submit" class="btn btn-lg btn-primary" (click)="SaveBill()">Save</button>
+			</div>
+		</div>
+	</form>
+</div>
