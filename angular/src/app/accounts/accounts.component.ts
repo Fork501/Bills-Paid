@@ -7,6 +7,7 @@ import { AccountEditComponent } from './account-edit/account-edit.component'
 
 import { ConfirmationBox } from '../confirmation-box/confirmation-box.service'
 import { ConfirmationDialogComponent } from '../confirmation-box/confirmation-dialog/confirmation-dialog.component';
+import { ResponseMessage } from '../models/response-message';
 
 @Component({
 	selector: 'app-accounts',
@@ -35,8 +36,11 @@ export class AccountsComponent implements OnInit {
 		this.confirmationBox.ShowConfirmation(`Are you sure you want to delete account ${account.Name}?`).subscribe(data => {
 			if(data)
 				this.httpClient.delete('/api/account/' + account._id.$oid).subscribe(
-					data => {
-						this.GetAccountsAndShowSuccess();
+					(data : ResponseMessage) => {
+						if(!data.Success)
+							this.ShowFailureMessage(data.Message);
+						else
+							this.GetAccountsAndShowSuccess();
 					}
 				);
 		});
@@ -82,5 +86,9 @@ export class AccountsComponent implements OnInit {
 				if(data)
 					this.GetAccountsAndShowSuccess();
 		});
+	}
+
+	ShowFailureMessage(msg) {
+		this.snackbar.open(`Request Failed: ${msg}`, null, { duration: 2000 });
 	}
 }

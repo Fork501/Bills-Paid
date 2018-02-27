@@ -38,9 +38,11 @@ class MongoClient(object):
 
 	# BEGIN Bill
 
-	def get_billing_month(self, month, year):
-		"""Retrieve a specified billing month"""
-		return self.db_conn.bills.find_one({'BillingMonth' : datetime(year, month, 1)})
+	def count_bills_for_account(self, account_id):
+		"""Counts number of times that an account appeared in a billing month"""
+		return self.db_conn.bills.find(
+			{ "Bills.AccountId" : ObjectId(account_id) }
+		).count()
 
 	def create_bill(self, date, amount, account_id):
 		"""Retrieve a specified billing month"""
@@ -57,7 +59,7 @@ class MongoClient(object):
 						[
 							{
 								'_id' : ObjectId(),
-								'AccountId' : ObjectId(account_id['$oid']),
+								'AccountId' : ObjectId(account_id),
 								'Date' : datetime(parsed_date.year, parsed_date.month, parsed_date.day),
 								'Amount' : amount
 							}
@@ -79,6 +81,10 @@ class MongoClient(object):
 				}
 			}
 		)
+
+	def get_billing_month(self, month, year):
+		"""Retrieve a specified billing month"""
+		return self.db_conn.bills.find_one({'BillingMonth' : datetime(year, month, 1)})
 
 	def update_bill(self, date, amount, account_id, bill_id, _id):
 		"""Retrieve a specified billing month"""
