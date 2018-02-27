@@ -1,7 +1,6 @@
 """Mongo implementation"""
 from datetime import datetime
 from dateutil import parser
-from bson.codec_options import CodecOptions
 from bson.objectid import ObjectId
 import pymongo
 
@@ -54,10 +53,16 @@ class MongoClient(object):
 				{
 					'Bills' :
 					{
-						"_id" : ObjectId(),
-						"AccountId" : ObjectId(account_id['$oid']),
-						"Date" : datetime(parsed_date.year, parsed_date.month, parsed_date.day),
-						"Amount" : amount
+						"$each" :
+						[
+							{
+								"_id" : ObjectId(),
+								"AccountId" : ObjectId(account_id['$oid']),
+								"Date" : datetime(parsed_date.year, parsed_date.month, parsed_date.day),
+								"Amount" : amount
+							}
+						],
+						"$sort" : {"Date" : 1}
 					}
 				}
 			},

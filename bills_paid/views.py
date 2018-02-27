@@ -2,7 +2,7 @@
 import json
 from dateutil import parser
 from bson import json_util
-from bson.json_util import JSONOptions, ObjectId
+from bson.json_util import JSONOptions
 from pyramid.view import view_config, view_defaults
 from bills_paid.mongo import MongoClient
 
