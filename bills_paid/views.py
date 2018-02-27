@@ -24,7 +24,7 @@ class AccountApi(object):
 				'DayOfMonth' : res['DayOfMonth'],
 				'Active' : res['Active']
 			})
-		return {'Result' : 'Success'}
+		return {'Success' : True}
 
 	# This needs to be updated
 	# If an account was used in a bill, it should deny deletion
@@ -32,8 +32,12 @@ class AccountApi(object):
 	def delete_account(self):
 		"""Deletes an existing account"""
 		account_id = self.request.matchdict["accountId"]
+
+		if self.mongo_client.count_bills_for_account(account_id):
+			return {'Success' : False, 'Message' : 'Account appears in a billing month'}
+
 		self.mongo_client.delete_account(account_id)
-		return {'Result' : 'Success'}
+		return {'Success' : True}
 
 	@view_config(request_method='GET')
 	def get_accounts(self):
@@ -64,7 +68,7 @@ class AccountApi(object):
 				'Active' : res['Active']
 			}
 		)
-		return {'Result' : 'Success'}
+		return {'Success' : True}
 
 @view_defaults(route_name='billsPaidApi', renderer='json')
 class BillsPaidApi(object):
@@ -77,15 +81,15 @@ class BillsPaidApi(object):
 	def create_bill(self):
 		"""Creates a line item for a bill"""
 		res = json.loads(self.request.body)
-		self.mongo_client.create_bill(res["Date"], res['Amount'], res['AccountId'])
-		return {'Result' : 'Success'}
+		self.mongo_client.create_bill(res["Date"], res['Amount'], res['AccountId']['$oid'])
+		return {'Success' : True}
 
 	@view_config(route_name='apiBillsDelete', request_method='DELETE')
 	def delete_bill(self):
 		"""Deletes an existing account"""
 		bill_id = self.request.matchdict["billId"]
 		self.mongo_client.delete_bill(bill_id)
-		return {'Result' : 'Success'}
+		return {'Success' : True}
 
 	@view_config(route_name='apiBillsGetMonth', request_method='GET')
 	def get_billing_month(self):
@@ -120,7 +124,7 @@ class BillsPaidApi(object):
 			res['AccountId'],
 			res['_id'],
 			self.request.matchdict['billId'])
-		return {'Result' : 'Success'}
+		return {'Success' : True}
 
 @view_defaults(renderer='index.html')
 class BillsPaidViews(object):
