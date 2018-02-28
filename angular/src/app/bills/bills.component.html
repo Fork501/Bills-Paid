@@ -5,7 +5,13 @@
 	</div>
 </div>
 <div class="mat-elevation-z5">
-	{{GetHeaderDateString(billMonth.BillingMonth)}}
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col col-1 offset-4 text-right"><i class="fa fa-lg fa-caret-left color-royalblue" (click)="DateAdd(-1)"></i></div>
+			<div class="col col-2 text-center">{{GetHeaderDateString()}}</div>
+			<div class="col col-1 text-left"><i class="fa fa-lg fa-caret-right color-royalblue" (click)="DateAdd(1)"></i></div>
+		</div>
+	</div>
 	<mat-table #table [dataSource]="billMonth.Bills">
 		<ng-container matColumnDef="Account">
 			<mat-header-cell *matHeaderCellDef class="col col-3">Account</mat-header-cell>
