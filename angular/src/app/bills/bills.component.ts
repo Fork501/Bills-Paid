@@ -13,19 +13,24 @@ import { BillMonth } from '../models/billMonth.model';
   styleUrls: ['./bills.component.css']
 })
 export class BillsComponent implements OnInit {
+	billMonth: BillMonth = new BillMonth();
+	displayedColumns = [ 'Account', 'Date', 'Amount', 'Options' ];
+	queryDate = new Date();
+	totalBills = 0;
+
 	constructor(private httpClient: HttpClient,
 		public dialog: MatDialog,
 		public snackbar: MatSnackBar,
 		public confirmationBox: ConfirmationBox) { }
 
-	billMonth: BillMonth = new BillMonth();
-	totalBills = 0;
-
-	displayedColumns = [ 'Account', 'Date', 'Amount', 'Options' ];
-
   	ngOnInit() {
 		this.GetBills();
   	}
+
+	DateAdd(months) {
+		this.queryDate = new Date(this.queryDate.setMonth(this.queryDate.getMonth() + months));
+		this.GetBills();
+	}
 
 	DeleteBill(bill) {
 		let dateString = this.GetDateStringFromAPIDateObject(bill.Date);
@@ -40,8 +45,10 @@ export class BillsComponent implements OnInit {
 				);
 		});
 	}
+
 	GetBills() {
-		this.httpClient.get<string>('/api/bills/2018-02-01').subscribe(
+		let url = `/api/bills/${this.GetFormattedDate()}`;
+		this.httpClient.get<string>(url).subscribe(
 			data => {
 				this.billMonth = JSON.parse(data) as BillMonth;
 
@@ -71,17 +78,24 @@ export class BillsComponent implements OnInit {
 		return "$" + <string>parseFloat(money).toFixed(2)
 	}
 
-	GetHeaderDateString (dateToParse) {
-		if(dateToParse && dateToParse.$date)
-		{
-			let date = new Date(dateToParse.$date);
-    		let formattedHeader = date.toLocaleString('en-us', { month: 'long', year: 'numeric', timeZone: 'UTC' });
-			return formattedHeader;
-		}
+	GetHeaderDateString () {
+		return this.queryDate.toLocaleString('en-us', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+	}
+
+	GetFormattedDate () {
+		let dt = this.queryDate;
+		let year = dt.toLocaleString('en-us', {
+			year: 'numeric'
+		});
+		let month = dt.toLocaleString('en-us', {
+			month: 'numeric'
+		});
+
+		return `${year}-${month}-1`;
 	}
 
 	OpenBillEdit(bill) {
-		this.dialog.open(BillsEditComponent, { height: '300 px', data: { data: bill } }).afterClosed().subscribe(
+		this.dialog.open(BillsEditComponent, { height: '300 px', data: { data: bill, queryDate: this.queryDate } }).afterClosed().subscribe(
 			data => {
 				if(data)
 					this.GetBillsAndShowSuccess();
@@ -89,7 +103,7 @@ export class BillsComponent implements OnInit {
 	}
 
 	OpenBillNew() {
-		this.dialog.open(BillsEditComponent, { height: '300 px', data: { data: null } }).afterClosed().subscribe(
+		this.dialog.open(BillsEditComponent, { height: '300 px', data: { data: null, queryDate: this.queryDate } }).afterClosed().subscribe(
 			data => {
 				if(data)
 					this.GetBillsAndShowSuccess();
