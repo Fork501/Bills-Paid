@@ -100,7 +100,7 @@ class BillsPaidApi(object):
 		"""
 		date = self.request.matchdict["date"]
 		date_parsed = parser.parse(date)
-		billing_month = self.mongo_client.get_billing_month(date_parsed.month, date_parsed.year)
+		billing_months = self.mongo_client.get_billing_month(date_parsed.month, date_parsed.year)
 		options = JSONOptions(datetime_representation=json_util.DatetimeRepresentation.ISO8601)
 
 		accounts = self.mongo_client.get_all_accounts()
@@ -108,11 +108,15 @@ class BillsPaidApi(object):
 		for account in accounts:
 			accounts_list[account['_id']] = account['Name']
 
-		if billing_month:
-			for bill in billing_month['Bills']:
-				bill['AccountName'] = accounts_list[bill['AccountId']]
+		# Funky logic
+		to_return = {}
+		if billing_months:
+			for billing_month in billing_months:
+				to_return = billing_month
+				for bill in to_return['Bills']:
+					bill['AccountName'] = accounts_list[bill['AccountId']]
 
-		return json_util.dumps(billing_month, json_options=options)
+		return json_util.dumps(to_return, json_options=options)
 
 	@view_config(route_name="apiBillsUpdate", request_method="PUT")
 	def update_bill(self):
