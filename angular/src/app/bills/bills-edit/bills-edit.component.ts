@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 import { Account } from '../../models/account.model'
 import { Bill } from '../../models/bill.model'
@@ -16,6 +17,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 export class BillsEditComponent implements OnInit {
 
 	@ViewChild(NgForm) form;
+	@BlockUI('billsEdit') billsEditBlock : NgBlockUI;
 
 	accounts: Account[] = [];
 	bill: Bill;
@@ -82,6 +84,7 @@ export class BillsEditComponent implements OnInit {
 	}
 
 	SaveBill() {
+		this.billsEditBlock.start();
 		if(!this.form.valid)
 			return;
 
@@ -96,6 +99,7 @@ export class BillsEditComponent implements OnInit {
 		{
 			this.httpClient.post('/api/bills', billToSave).subscribe(
 				data => {
+					this.billsEditBlock.stop();
 					this.dialogRef.close(true);				
 				}
 			);
@@ -104,6 +108,7 @@ export class BillsEditComponent implements OnInit {
 		{
 			this.httpClient.put('/api/bills/' + billToSave._id.$oid, billToSave).subscribe(
 				data => {
+					this.billsEditBlock.stop();
 					this.dialogRef.close(true);				
 				}
 			);

@@ -12,7 +12,7 @@
 			<div class="col col-1 text-left"><i class="fa fa-lg fa-caret-right color-royalblue clickable" (click)="DateAdd(1)"></i></div>
 		</div>
 	</div>
-	<mat-table #table [dataSource]="billMonth.Bills">
+	<mat-table #table [dataSource]="billMonth.Bills" *blockUI="'billsTable'">
 		<ng-container matColumnDef="Account">
 			<mat-header-cell *matHeaderCellDef class="col col-3">Account</mat-header-cell>
 			<mat-cell *matCellDef="let bill" class="col col-2">{{bill.AccountName}}</mat-cell>
