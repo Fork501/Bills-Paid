@@ -13,6 +13,7 @@ import { BillMonth } from '../models/billMonth.model';
   styleUrls: ['./bills.component.css']
 })
 export class BillsComponent implements OnInit {
+
 	billMonth: BillMonth = new BillMonth();
 	displayedColumns = [ 'Account', 'Date', 'Amount', 'Options' ];
 	queryDate = new Date();

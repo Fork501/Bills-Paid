@@ -5,4 +5,5 @@ export class BillMonth {
 	_id: MongoId;
 	BillingMonth: Date;
 	Bills: Bill[];
+	BillsPaid: number;
 }

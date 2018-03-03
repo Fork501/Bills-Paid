@@ -7,9 +7,9 @@
 <div class="mat-elevation-z5">
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col col-1 offset-4 text-right"><i class="fa fa-lg fa-caret-left color-royalblue" (click)="DateAdd(-1)"></i></div>
+			<div class="col col-1 offset-4 text-right"><i class="fa fa-lg fa-caret-left color-royalblue clickable" (click)="DateAdd(-1)"></i></div>
 			<div class="col col-2 text-center">{{GetHeaderDateString()}}</div>
-			<div class="col col-1 text-left"><i class="fa fa-lg fa-caret-right color-royalblue" (click)="DateAdd(1)"></i></div>
+			<div class="col col-1 text-left"><i class="fa fa-lg fa-caret-right color-royalblue clickable" (click)="DateAdd(1)"></i></div>
 		</div>
 	</div>
 	<mat-table #table [dataSource]="billMonth.Bills">
@@ -34,12 +34,16 @@
 		</ng-container>
 		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 		<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+		<mat-row>Testing</mat-row>
 	</mat-table>
 </div>
-<div class="col col-2 offset-10" style="margin-bottom:15px;">
+<div class="col col-4 offset-8" style="margin-bottom:15px;">
 	<mat-chip-list>
 		<mat-chip color="primary" class="mat-elevation-z6">
 			{{totalBills}} Bill{{totalBills == 1 ? "" : "s"}}
 		</mat-chip>
-	</mat-chip-list>
+		<mat-chip *ngIf="billMonth.BillsPaid" color="primary" class="mat-elevation-z6">
+				Bills Paid: {{GetDollarString(billMonth.BillsPaid)}}
+			</mat-chip>
+		</mat-chip-list>
 </div>

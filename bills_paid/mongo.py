@@ -84,7 +84,20 @@ class MongoClient(object):
 
 	def get_billing_month(self, month, year):
 		"""Retrieve a specified billing month"""
-		return self.db_conn.bills.find_one({'BillingMonth' : datetime(year, month, 1)})
+		# return self.db_conn.bills.aggregate({'BillingMonth' : datetime(year, month, 1)})
+		return self.db_conn.bills.aggregate(
+			[
+				{
+					'$match': { 'BillingMonth' : datetime(year, month, 1) }
+				},
+				{
+					'$addFields':
+					{
+						'BillsPaid' : { '$sum': "$Bills.Amount" }
+					}
+				}
+			]
+		)
 
 	def update_bill(self, date, amount, account_id, bill_id, _id):
 		"""Retrieve a specified billing month"""
