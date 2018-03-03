@@ -24,6 +24,9 @@ export class BillsEditComponent implements OnInit {
 	billDate: Date;
 	billId: MongoId;
 
+	minDate: Date;
+	maxDate: Date;
+	
 	constructor(
 		public dialogRef: MatDialogRef<AccountEditComponent>,
 		@Inject(MAT_DIALOG_DATA) data: any,
@@ -36,6 +39,8 @@ export class BillsEditComponent implements OnInit {
 			this.billAmount = this.bill.Amount;
 			this.billDate = this.GetDateFromAPIDateObject(this.bill.Date);
 			this.billId = this.bill._id;
+
+			this.GetMinAndMax();
 		}
 		else
 		{
@@ -69,6 +74,11 @@ export class BillsEditComponent implements OnInit {
 			return new Date(dateToReturn);
 		}
 		return dateToParse;
+	}
+
+	GetMinAndMax() {
+		this.minDate = new Date(this.billDate.getFullYear(), this.billDate.getMonth(), 1);
+		this.maxDate = new Date(this.billDate.getFullYear(), this.billDate.getMonth() + 1, 0);
 	}
 
 	SaveBill() {
