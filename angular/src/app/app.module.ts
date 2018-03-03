@@ -27,6 +27,8 @@ import {
 	MatToolbarModule
 } from '@angular/material';
 
+import { BlockUIModule } from 'ng-block-ui'
+
 import { AccountsComponent } from './accounts/accounts.component';
 import { AccountEditComponent } from './accounts/account-edit/account-edit.component';
 import { BillsComponent } from './bills/bills.component';
@@ -47,6 +49,7 @@ import { BillsEditComponent } from './bills/bills-edit/bills-edit.component';
 	],
 	imports: [
 		AppRoutingModule,
+		BlockUIModule,
 		BrowserAnimationsModule,
 		BrowserModule,
 		FormsModule,

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { Message } from '../models/message.model';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { ConfirmationBox } from '../confirmation-box/confirmation-box.service';
@@ -18,6 +19,8 @@ export class BillsComponent implements OnInit {
 	displayedColumns = [ 'Account', 'Date', 'Amount', 'Options' ];
 	queryDate = new Date();
 	totalBills = 0;
+
+	@BlockUI('billsTable') billsTableBlock : NgBlockUI;
 
 	constructor(private httpClient: HttpClient,
 		public dialog: MatDialog,
@@ -48,6 +51,7 @@ export class BillsComponent implements OnInit {
 	}
 
 	GetBills() {
+		this.billsTableBlock.start();
 		let url = `/api/bills/${this.GetFormattedDate()}`;
 		this.httpClient.get<string>(url).subscribe(
 			data => {
@@ -58,6 +62,8 @@ export class BillsComponent implements OnInit {
 
 				if(this.billMonth.Bills)
 					this.totalBills = this.billMonth.Bills.length;
+
+				this.billsTableBlock.stop();
 			}
 		);
 	}
