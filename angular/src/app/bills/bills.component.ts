@@ -5,6 +5,7 @@ import { Message } from '../models/message.model';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { ConfirmationBox } from '../confirmation-box/confirmation-box.service';
 import { BillsEditComponent } from './bills-edit/bills-edit.component';
+import { Account } from '../models/account.model'
 import { Bill } from '../models/bill.model';
 import { BillMonth } from '../models/billMonth.model';
 
@@ -15,6 +16,7 @@ import { BillMonth } from '../models/billMonth.model';
 })
 export class BillsComponent implements OnInit {
 
+	accounts: Account[] = [];
 	billMonth: BillMonth = new BillMonth();
 	displayedColumns = [ 'Account', 'Date', 'Amount', 'Options' ];
 	queryDate = new Date();
@@ -29,6 +31,7 @@ export class BillsComponent implements OnInit {
 
   	ngOnInit() {
 		this.GetBills();
+		this.GetAccounts();
   	}
 
 	DateAdd(months) {
@@ -48,6 +51,20 @@ export class BillsComponent implements OnInit {
 					}
 				);
 		});
+	}
+
+	GetAccounts() {
+		return this.httpClient.get<Account>('/api/account').subscribe(
+			data => {
+				let results: Account[] = [];
+				for(var i in data)
+					results.push(JSON.parse(data[i]));
+
+				this.accounts = results;
+
+				this.GetUpcomingBills();
+			}
+		);
 	}
 
 	GetBills() {
@@ -99,6 +116,15 @@ export class BillsComponent implements OnInit {
 		});
 
 		return `${year}-${month}-1`;
+	}
+
+	GetUpcomingBills() {
+		let found: boolean;
+		// If no match for account in the bill month, the bill is still upcoming
+		// We'll add $0 for bills that are skipped this month
+		this.accounts.forEach(account => {
+			console.log(this.billMonth);
+		});
 	}
 
 	OpenBillEdit(bill) {
