@@ -11,6 +11,13 @@ Development should be done from the **angular** folder.  Since this is an ejecte
 
 `npm run build`
 
+## Running the application
+In the root folder for the project, run Pyramid's pserve with the associated .ini launch file:
+
+`pserve development.ini`
+
+To view the application in a browser, navigate to port 501.  http://localhost:501 (for example)
+
 ## Building the Docker container
 `docker build -t bills-paid:latest .`
 
