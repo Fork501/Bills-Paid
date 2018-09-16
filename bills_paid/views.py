@@ -70,6 +70,7 @@ class AccountApi(object):
 		)
 		return {'Success': True}
 
+
 @view_defaults(route_name='billsPaidApi', renderer='json')
 class BillsPaidApi(object):
 	"""API methods for /billspaid"""
@@ -113,8 +114,9 @@ class BillsPaidApi(object):
 		if billing_months:
 			for billing_month in billing_months:
 				to_return = billing_month
-				for bill in to_return['Bills']:
-					bill['AccountName'] = accounts_list[bill['AccountId']]
+				if 'Bills' in to_return:
+					for bill in to_return['Bills']:
+						bill['AccountName'] = accounts_list[bill['AccountId']]
 
 		return json_util.dumps(to_return, json_options=options)
 
@@ -129,6 +131,7 @@ class BillsPaidApi(object):
 			res['_id'],
 			self.request.matchdict['billId'])
 		return {'Success': True}
+
 
 @view_defaults(renderer='index.html')
 class BillsPaidViews(object):

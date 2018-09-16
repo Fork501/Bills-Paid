@@ -18,9 +18,12 @@ export class BillsComponent implements OnInit {
 
 	accounts: Account[] = [];
 	billMonth: BillMonth = new BillMonth();
-	displayedColumns = [ 'Account', 'Date', 'Amount', 'Options' ];
+	displayedColumnsPaid = [ 'Account', 'Date', 'Amount', 'Options' ];
+	displayedColumnsUpcoming = [ 'Account', 'Amount', 'Options' ];
 	queryDate = new Date();
-	totalBills = 0;
+	totalBillsPaid = 0;
+	totalBillsUpcoming = 0;
+	upcomingBills: Bill[] = [];
 
 	@BlockUI('billsTable') billsTableBlock : NgBlockUI;
 
@@ -78,7 +81,12 @@ export class BillsComponent implements OnInit {
 					this.billMonth = new BillMonth();
 
 				if(this.billMonth.Bills)
-					this.totalBills = this.billMonth.Bills.length;
+				{
+					console.info(this.billMonth.Bills);
+					this.totalBillsPaid = this.billMonth.Bills.length;
+				}
+				else
+					this.totalBillsPaid = 0;
 
 				this.billsTableBlock.stop();
 			}
@@ -123,7 +131,8 @@ export class BillsComponent implements OnInit {
 		// If no match for account in the bill month, the bill is still upcoming
 		// We'll add $0 for bills that are skipped this month
 		this.accounts.forEach(account => {
-			console.log(this.billMonth);
+			// Do something with the accounts..?
+			//console.log(this.billMonth);
 		});
 	}
 

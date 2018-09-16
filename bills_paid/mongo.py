@@ -6,6 +6,7 @@ import pymongo
 
 from bills_paid.settings import MONGO_ENDPOINT
 
+
 class MongoClient(object):
 	"""Mongo client manager"""
 	def __init__(self):
@@ -20,7 +21,7 @@ class MongoClient(object):
 
 	def delete_account(self, account_id):
 		"""Update an existing account"""
-		self.db_conn.account.delete_one({'_id' : ObjectId(account_id)})
+		self.db_conn.account.delete_one({'_id': ObjectId(account_id)})
 
 	def get_all_accounts(self):
 		"""Get a list of all accounts"""
@@ -32,7 +33,7 @@ class MongoClient(object):
 
 	def update_account(self, account_id, account):
 		"""Update an existing account"""
-		self.db_conn.account.update_one({'_id' : ObjectId(account_id)}, {'$set' : account})
+		self.db_conn.account.update_one({'_id': ObjectId(account_id)}, {'$set': account})
 
 	# END Account
 
@@ -49,22 +50,22 @@ class MongoClient(object):
 		parsed_date = parser.parse(date)
 
 		self.db_conn.bills.update(
-			{'BillingMonth' : datetime(parsed_date.year, parsed_date.month, 1)},
+			{'BillingMonth': datetime(parsed_date.year, parsed_date.month, 1)},
 			{
-				'$push' :
+				'$push':
 				{
-					'Bills' :
+					'Bills':
 					{
-						'$each' :
+						'$each':
 						[
 							{
-								'_id' : ObjectId(),
-								'AccountId' : ObjectId(account_id),
-								'Date' : datetime(parsed_date.year, parsed_date.month, parsed_date.day),
-								'Amount' : amount
+								'_id': ObjectId(),
+								'AccountId': ObjectId(account_id),
+								'Date': datetime(parsed_date.year, parsed_date.month, parsed_date.day),
+								'Amount': amount
 							}
 						],
-						'$sort' : {'Date' : 1}
+						'$sort': {'Date': 1}
 					}
 				}
 			},
@@ -73,11 +74,11 @@ class MongoClient(object):
 	def delete_bill(self, bill_id):
 		"""Update an existing account"""
 		self.db_conn.bills.update(
-			{'Bills._id' : ObjectId(bill_id)},
+			{'Bills._id': ObjectId(bill_id)},
 			{
-				'$pull' :
+				'$pull':
 				{
-					'Bills' : {'_id' : ObjectId(bill_id)}
+					'Bills': {'_id': ObjectId(bill_id)}
 				}
 			}
 		)
@@ -88,12 +89,12 @@ class MongoClient(object):
 		return self.db_conn.bills.aggregate(
 			[
 				{
-					'$match': { 'BillingMonth' : datetime(year, month, 1) }
+					'$match': {'BillingMonth' : datetime(year, month, 1)}
 				},
 				{
 					'$addFields':
 					{
-						'BillsPaid' : { '$sum': "$Bills.Amount" }
+						'BillsPaid': {'$sum': "$Bills.Amount"}
 					}
 				}
 			]
@@ -110,18 +111,18 @@ class MongoClient(object):
 
 		self.db_conn.bills.update(
 			{
-				'BillingMonth' : datetime(parsed_date.year, parsed_date.month, 1),
-				'Bills._id' : _id
+				'BillingMonth': datetime(parsed_date.year, parsed_date.month, 1),
+				'Bills._id': _id
 			},
 			{
-				'$set' :
+				'$set':
 				{
-					'Bills.$' :
+					'Bills.$':
 					{
-						'_id' : bill_id,
-						'AccountId' : account_id,
-						'Date' : parsed_date,
-						'Amount' : amount
+						'_id': bill_id,
+						'AccountId': account_id,
+						'Date': parsed_date,
+						'Amount': amount
 					}
 				}
 			},

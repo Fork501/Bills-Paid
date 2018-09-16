@@ -13,7 +13,6 @@ import {
 	MatChipsModule,
 	MatDatepickerModule,
 	MatDialogModule,
-	MatDividerModule,
 	MatIconModule,
 	MatInputModule,
 	MatListModule,
@@ -24,7 +23,8 @@ import {
 	MatSnackBarModule,
 	MatTableModule,
 	MatTabsModule,
-	MatToolbarModule
+	MatToolbarModule,
+	MatCheckboxModule
 } from '@angular/material';
 
 import { BlockUIModule } from 'ng-block-ui'
@@ -53,6 +53,7 @@ import { BillsEditComponent } from './bills/bills-edit/bills-edit.component';
 		BrowserAnimationsModule,
 		BrowserModule,
 		FormsModule,
+		MatCheckboxModule,
 		MatChipsModule,
 		HttpClientModule,
 		MatCardModule,

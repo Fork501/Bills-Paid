@@ -1,30 +1,33 @@
 <div class="header col col-12">
 	<div class="row">
 		<span class="h2">Accounts</span>
-		<span style="padding-top:5px; margin-left:8px;"><i class="fa fa-sm fa-plus-circle color-forestgreen" (click)="OpenAccountNew()"></i></span>
+		<span style="padding-top:5px; margin-left:8px;"><i class="fa fa-sm fa-plus-circle color-forestgreen clickable" (click)="OpenAccountNew()"></i></span>
 	</div>
 </div>
 <div class="mat-elevation-z5">
-	<mat-table #table [dataSource]="accounts">
+	<mat-table #table [dataSource]="accounts" *blockUI="'accountsTable'">
 		<ng-container matColumnDef="Name">
-			<mat-header-cell *matHeaderCellDef class="col col-8">Name</mat-header-cell>
-			<mat-cell *matCellDef="let account" class="col col-8">{{account.Name}}</mat-cell>
+			<mat-header-cell *matHeaderCellDef class="col col-10">Name</mat-header-cell>
+			<mat-cell *matCellDef="let account" class="col col-10"> {{account.Name}}</mat-cell>
 		</ng-container>
-		<ng-container matColumnDef="Options" cssClassFriendlyName="col-xs-1">
-				<mat-header-cell *matHeaderCellDef class="col col-4"></mat-header-cell>
-				<mat-cell *matCellDef="let account" class="col col-4">
-					<span class="col"><i class="fa fa-eye fa-lg color-royalblue clickable" (click)="OpenAccountEdit(account)"></i></span>
-					<span class="col"><i class="fa fa-times fa-lg color-tomato clickable" (click)="DeleteAccount(account)"></i></span>
-				</mat-cell>
-			</ng-container>
-			<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-		<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+		<ng-container matColumnDef="Options">
+			<mat-header-cell *matHeaderCellDef class="col col-2"></mat-header-cell>
+			<mat-cell *matCellDef="let account" class="col col-2 text-right">
+				<span class="col"><i class="fa fa-eye fa-lg color-royalblue clickable" (click)="OpenAccountEdit(account)"></i></span>
+				<span class="col"><i class="fa fa-times fa-lg color-tomato clickable" (click)="DeleteAccount(account)"></i></span>
+			</mat-cell>
+		</ng-container>
+		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+		<mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'background-color-danger' : !row.Active}"></mat-row>
 	</mat-table>
 </div>
-<div class="col col-2 offset-10" style="margin-bottom:15px;">
-	<mat-chip-list>
-		<mat-chip color="primary" class="mat-elevation-z6">
-			{{totalAccounts}} Account{{totalAccounts == 1 ? "" : "s"}}
+<div class="col col-3 offset-9" style="margin-bottom:15px;">
+	<mat-chip-list class="float-right" style="height:100px;">
+		<mat-chip color="primary" class="mat-elevation-z6" *ngIf="totalAccountsActive > 0">
+			{{totalAccountsActive}} Active Account{{totalAccountsActive == 1 ? "" : "s"}}
+		</mat-chip>
+		<mat-chip color="primary" class="mat-elevation-z6" *ngIf="totalAccountsInactive > 0">
+			{{totalAccountsInactive}} Inactive Account{{totalAccountsInactive == 1 ? "" : "s"}}
 		</mat-chip>
 	</mat-chip-list>
 </div>
