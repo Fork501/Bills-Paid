@@ -1,49 +1,91 @@
 <div class="header col col-12">
 	<div class="row">
 		<span class="h2">Bills</span>
-		<span style="padding-top:5px; margin-left:8px;"><i class="fa fa-sm fa-plus-circle color-forestgreen" (click)="OpenBillNew()"></i></span>
+		<span style="padding-top:5px; margin-left:8px;"><i class="fa fa-sm fa-plus-circle color-forestgreen clickable" (click)="OpenBillNew()"></i></span>
 	</div>
 </div>
 <div class="mat-elevation-z5">
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col col-1 offset-4 text-right"><i class="fa fa-lg fa-caret-left color-royalblue clickable" (click)="DateAdd(-1)"></i></div>
-			<div class="col col-2 text-center">{{GetHeaderDateString()}}</div>
-			<div class="col col-1 text-left"><i class="fa fa-lg fa-caret-right color-royalblue clickable" (click)="DateAdd(1)"></i></div>
-		</div>
-	</div>
-	<mat-table #table [dataSource]="billMonth.Bills" *blockUI="'billsTable'">
-		<ng-container matColumnDef="Account">
-			<mat-header-cell *matHeaderCellDef class="col col-3">Account</mat-header-cell>
-			<mat-cell *matCellDef="let bill" class="col col-2">{{bill.AccountName}}</mat-cell>
-		</ng-container>
-			<ng-container matColumnDef="Date">
-			<mat-header-cell *matHeaderCellDef class="col col-2">Date</mat-header-cell>
-			<mat-cell *matCellDef="let bill" class="col col-2">{{GetDateStringFromAPIDateObject(bill.Date)}}</mat-cell>
-		</ng-container>
-		<ng-container matColumnDef="Amount">
-			<mat-header-cell *matHeaderCellDef class="col col-2">Amount</mat-header-cell>
-			<mat-cell *matCellDef="let bill" class="col col-2">{{GetDollarString(bill.Amount)}}</mat-cell>
-		</ng-container>
-		<ng-container matColumnDef="Options" cssClassFriendlyName="col-xs-1">
-			<mat-header-cell *matHeaderCellDef class="col col-4"></mat-header-cell>
-			<mat-cell *matCellDef="let bill" class="col col-4">
-				<span class="col"><i class="fa fa-eye fa-lg color-royalblue clickable" (click)="OpenBillEdit(bill)"></i></span>
-				<span class="col"><i class="fa fa-times fa-lg color-tomato clickable" (click)="DeleteBill(bill)"></i></span>
-			</mat-cell>
-		</ng-container>
-		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-		<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-		<mat-row>Testing</mat-row>
-	</mat-table>
-</div>
-<div class="col col-4 offset-8" style="margin-bottom:15px;">
-	<mat-chip-list>
-		<mat-chip color="primary" class="mat-elevation-z6">
-			{{totalBills}} Bill{{totalBills == 1 ? "" : "s"}}
-		</mat-chip>
-		<mat-chip *ngIf="billMonth.BillsPaid" color="primary" class="mat-elevation-z6">
-				Bills Paid: {{GetDollarString(billMonth.BillsPaid)}}
-			</mat-chip>
-		</mat-chip-list>
+	<mat-tab-group>
+		<mat-tab label="Paid">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col col-1 offset-4 text-right"><i class="fa fa-lg fa-caret-left color-royalblue clickable" (click)="DateAdd(-1)"></i></div>
+					<div class="col col-2 text-center">{{GetHeaderDateString()}}</div>
+					<div class="col col-1 text-left"><i class="fa fa-lg fa-caret-right color-royalblue clickable" (click)="DateAdd(1)"></i></div>
+				</div>
+			</div>
+			<mat-table #table [dataSource]="billMonth.Bills" *blockUI="'billsTable'">
+				<ng-container matColumnDef="Account">
+					<mat-header-cell *matHeaderCellDef class="col col-3">Account</mat-header-cell>
+					<mat-cell *matCellDef="let bill" class="col col-2">{{bill.AccountName}}</mat-cell>
+				</ng-container>
+				<ng-container matColumnDef="Date">
+					<mat-header-cell *matHeaderCellDef class="col col-2">Date</mat-header-cell>
+					<mat-cell *matCellDef="let bill" class="col col-2">{{GetDateStringFromAPIDateObject(bill.Date)}}</mat-cell>
+				</ng-container>
+				<ng-container matColumnDef="Amount">
+					<mat-header-cell *matHeaderCellDef class="col col-2">Amount</mat-header-cell>
+					<mat-cell *matCellDef="let bill" class="col col-2">{{GetDollarString(bill.Amount)}}</mat-cell>
+				</ng-container>
+				<ng-container matColumnDef="Options" cssClassFriendlyName="col-xs-1">
+					<mat-header-cell *matHeaderCellDef class="col col-4"></mat-header-cell>
+					<mat-cell *matCellDef="let bill" class="col col-4">
+						<span class="col"><i class="fa fa-eye fa-lg color-royalblue clickable" (click)="OpenBillEdit(bill)"></i></span>
+						<span class="col"><i class="fa fa-times fa-lg color-tomato clickable" (click)="DeleteBill(bill)"></i></span>
+					</mat-cell>
+				</ng-container>
+				<mat-header-row *matHeaderRowDef="displayedColumnsPaid"></mat-header-row>
+				<mat-row *matRowDef="let row; columns: displayedColumnsPaid;"></mat-row>
+				<mat-row>Testing</mat-row>
+			</mat-table>
+			<div class="col col-4 offset-8" style="margin-bottom:15px;">
+				<mat-chip-list>
+					<mat-chip color="primary" class="mat-elevation-z6">
+						{{totalBillsPaid}} Bill{{totalBillsPaid == 1 ? "" : "s"}}
+					</mat-chip>
+					<mat-chip *ngIf="billMonth.BillsPaid" color="primary" class="mat-elevation-z6">
+						Bills Paid: {{GetDollarString(billMonth.BillsPaid)}}
+					</mat-chip>
+					<mat-chip *ngIf="billMonth.PaymentsPending" color="primary" class="mat-elevation-z6">
+						Payments Pending: {{GetDollarString(billMonth.PaymentsPending)}}
+					</mat-chip>
+				</mat-chip-list>
+			</div>
+		</mat-tab>
+		<mat-tab label="Upcoming">
+			<mat-table #table [dataSource]="upcomingBills" *blockUI="'upcomingTable'">
+				<ng-container matColumnDef="Account">
+					<mat-header-cell *matHeaderCellDef class="col col-3">Account</mat-header-cell>
+					<mat-cell *matCellDef="let bill" class="col col-2">{{bill.AccountName}}</mat-cell>
+				</ng-container>
+				<ng-container matColumnDef="Amount">
+					<mat-header-cell *matHeaderCellDef class="col col-2">Amount</mat-header-cell>
+					<mat-cell *matCellDef="let bill" class="col col-2">{{GetDollarString(bill.Amount)}}</mat-cell>
+				</ng-container>
+				<ng-container matColumnDef="Options" cssClassFriendlyName="col-xs-1">
+					<mat-header-cell *matHeaderCellDef class="col col-4"></mat-header-cell>
+					<mat-cell *matCellDef="let bill" class="col col-4">
+						<span class="col"><i class="fa fa-eye fa-lg color-royalblue clickable" (click)="OpenBillEdit(bill)"></i></span>
+						<span class="col"><i class="fa fa-times fa-lg color-tomato clickable" (click)="DeleteBill(bill)"></i></span>
+					</mat-cell>
+				</ng-container>
+				<mat-header-row *matHeaderRowDef="displayedColumnsUpcoming"></mat-header-row>
+				<mat-row *matRowDef="let row; columns: displayedColumnsUpcoming;"></mat-row>
+				<mat-row>Testing</mat-row>
+			</mat-table>
+			<div class="col col-4 offset-8" style="margin-bottom:15px;">
+				<mat-chip-list>
+					<mat-chip color="primary" class="mat-elevation-z6">
+						{{totalBillsUpcoming}} Bill{{totalBillsUpcoming == 1 ? "" : "s"}}
+					</mat-chip>
+					<mat-chip *ngIf="billMonth.BillsPaid" color="primary" class="mat-elevation-z6">
+						Bills Paid: {{GetDollarString(billMonth.BillsPaid)}}
+					</mat-chip>
+					<mat-chip *ngIf="billMonth.PaymentsPending" color="primary" class="mat-elevation-z6">
+						Payments Pending: {{GetDollarString(billMonth.PaymentsPending)}}
+					</mat-chip>
+				</mat-chip-list>
+			</div>
+		</mat-tab>
+	</mat-tab-group>
 </div>

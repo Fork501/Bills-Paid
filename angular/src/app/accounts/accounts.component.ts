@@ -1,3 +1,4 @@
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog, MatSnackBar, MatTableDataSource } from '@angular/material';
@@ -20,7 +21,10 @@ export class AccountsComponent implements OnInit {
 	account = new Account();
 	accounts = new MatTableDataSource();
 	displayedColumns = [ 'Name', 'Options' ];
-	totalAccounts = 0;
+	totalAccountsActive = 0;
+	totalAccountsInactive = 0;
+
+	@BlockUI('accountsTable') accountsTableBlock : NgBlockUI;
 
 	constructor(
 		private httpClient: HttpClient,
@@ -47,6 +51,7 @@ export class AccountsComponent implements OnInit {
 	}
 
 	GetAccounts() {
+		this.accountsTableBlock.start();
 		this.httpClient.get<Account>('/api/account').subscribe(
 			data => {
 				let results: Account[] = [];
@@ -55,6 +60,7 @@ export class AccountsComponent implements OnInit {
 
 				this.accounts.data = results;
 				this.GetAccountsCount();
+				this.accountsTableBlock.stop();
 			}
 		);
 	}
@@ -65,15 +71,19 @@ export class AccountsComponent implements OnInit {
 	}
 
 	GetAccountsCount() {
-		this.httpClient.get('/api/account/count').subscribe(
-			data => {
-				this.totalAccounts = +data;
-			}
-		);
+		this.totalAccountsActive = this.totalAccountsInactive = 0;
+
+		for(var a in this.accounts.data)
+		{
+			if((<Account>this.accounts.data[a]).Active)
+				this.totalAccountsActive += 1;
+			else
+				this.totalAccountsInactive += 1;
+		}
 	}
 
 	OpenAccountEdit(account) {
-		this.dialog.open(AccountEditComponent, { height: '300 px', data: { data: account } }).afterClosed().subscribe(
+		this.dialog.open(AccountEditComponent, { height: '300 px', data: { data: account } }).beforeClose().subscribe(
 			data => {
 				if(data)
 					this.GetAccountsAndShowSuccess();
@@ -81,7 +91,7 @@ export class AccountsComponent implements OnInit {
 	}
 
 	OpenAccountNew() {
-		this.dialog.open(AccountEditComponent, { height: '300 px', data: { data: null } }).afterClosed().subscribe(
+		this.dialog.open(AccountEditComponent, { height: '300 px', data: { data: null } }).beforeClose().subscribe(
 			data => {
 				if(data)
 					this.GetAccountsAndShowSuccess();

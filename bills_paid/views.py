@@ -20,11 +20,11 @@ class AccountApi(object):
 		res = json.loads(self.request.body)
 		self.mongo_client.create_account(
 			{
-				'Name' : res['Name'],
-				'DayOfMonth' : res['DayOfMonth'],
-				'Active' : res['Active']
+				'Name': res['Name'],
+				'DayOfMonth': res['DayOfMonth'],
+				'Active': res['Active']
 			})
-		return {'Success' : True}
+		return {'Success': True}
 
 	# This needs to be updated
 	# If an account was used in a bill, it should deny deletion
@@ -34,10 +34,10 @@ class AccountApi(object):
 		account_id = self.request.matchdict["accountId"]
 
 		if self.mongo_client.count_bills_for_account(account_id):
-			return {'Success' : False, 'Message' : 'Account appears in a billing month'}
+			return {'Success': False, 'Message': 'Account appears in a billing month'}
 
 		self.mongo_client.delete_account(account_id)
-		return {'Success' : True}
+		return {'Success': True}
 
 	@view_config(request_method='GET')
 	def get_accounts(self):
@@ -63,12 +63,13 @@ class AccountApi(object):
 		self.mongo_client.update_account(
 			account_id,
 			{
-				'Name' : res['Name'],
-				'DayOfMonth' : res['DayOfMonth'],
-				'Active' : res['Active']
+				'Name': res['Name'],
+				'DayOfMonth': res['DayOfMonth'],
+				'Active': res['Active']
 			}
 		)
-		return {'Success' : True}
+		return {'Success': True}
+
 
 @view_defaults(route_name='billsPaidApi', renderer='json')
 class BillsPaidApi(object):
@@ -82,14 +83,14 @@ class BillsPaidApi(object):
 		"""Creates a line item for a bill"""
 		res = json.loads(self.request.body)
 		self.mongo_client.create_bill(res["Date"], res['Amount'], res['AccountId']['$oid'])
-		return {'Success' : True}
+		return {'Success': True}
 
 	@view_config(route_name='apiBillsDelete', request_method='DELETE')
 	def delete_bill(self):
 		"""Deletes an existing account"""
 		bill_id = self.request.matchdict["billId"]
 		self.mongo_client.delete_bill(bill_id)
-		return {'Success' : True}
+		return {'Success': True}
 
 	@view_config(route_name='apiBillsGetMonth', request_method='GET')
 	def get_billing_month(self):
@@ -113,8 +114,9 @@ class BillsPaidApi(object):
 		if billing_months:
 			for billing_month in billing_months:
 				to_return = billing_month
-				for bill in to_return['Bills']:
-					bill['AccountName'] = accounts_list[bill['AccountId']]
+				if 'Bills' in to_return:
+					for bill in to_return['Bills']:
+						bill['AccountName'] = accounts_list[bill['AccountId']]
 
 		return json_util.dumps(to_return, json_options=options)
 
@@ -128,7 +130,8 @@ class BillsPaidApi(object):
 			res['AccountId'],
 			res['_id'],
 			self.request.matchdict['billId'])
-		return {'Success' : True}
+		return {'Success': True}
+
 
 @view_defaults(renderer='index.html')
 class BillsPaidViews(object):
