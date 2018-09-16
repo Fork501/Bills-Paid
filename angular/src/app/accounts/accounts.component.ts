@@ -9,6 +9,7 @@ import { AccountEditComponent } from './account-edit/account-edit.component'
 import { ConfirmationBox } from '../confirmation-box/confirmation-box.service'
 import { ConfirmationDialogComponent } from '../confirmation-box/confirmation-dialog/confirmation-dialog.component';
 import { ResponseMessage } from '../models/response-message';
+import { Settings } from '../app.settings'
 
 @Component({
 	selector: 'app-accounts',
@@ -39,7 +40,7 @@ export class AccountsComponent implements OnInit {
 	DeleteAccount(account : Account) {
 		this.confirmationBox.ShowConfirmation(`Are you sure you want to delete account ${account.Name}?`).subscribe(data => {
 			if(data)
-				this.httpClient.delete('/api/account/' + account._id.$oid).subscribe(
+				this.httpClient.delete(Settings.API_BASE + '/api/account/' + account._id.$oid).subscribe(
 					(data : ResponseMessage) => {
 						if(!data.Success)
 							this.ShowFailureMessage(data.Message);
@@ -52,7 +53,7 @@ export class AccountsComponent implements OnInit {
 
 	GetAccounts() {
 		this.accountsTableBlock.start();
-		this.httpClient.get<Account>('/api/account').subscribe(
+		this.httpClient.get<Account>(Settings.API_BASE + '/api/account').subscribe(
 			data => {
 				let results: Account[] = [];
 				for(var i in data)

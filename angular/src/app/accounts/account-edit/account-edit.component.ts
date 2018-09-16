@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http'
 import { NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Account } from '../../models/account.model'
+import { Settings } from '../../app.settings'
 
 @Component({
 	selector: 'app-account-edit',
@@ -44,14 +45,14 @@ export class AccountEditComponent implements OnInit {
 		if(this.account != null && this.account._id != null && this.account._id.$oid != null && this.account._id.$oid != '')
 		{
 			this.account.Active = this.accountActive;
-			this.httpClient.put('/api/account/' + this.account._id.$oid, this.account).subscribe(
+			this.httpClient.put(Settings.API_BASE + '/api/account/' + this.account._id.$oid, this.account).subscribe(
 				data => { }
 			);
 		}
 		else
 		{
 			this.account.Active = true;
-			this.httpClient.post('/api/account', this.account).subscribe(
+			this.httpClient.post(Settings.API_BASE + '/api/account', this.account).subscribe(
 				data => { }
 			);
 		}
