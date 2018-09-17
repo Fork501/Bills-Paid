@@ -110,7 +110,7 @@ export class BillsEditComponent implements OnInit {
 			this.httpClient.put(Settings.API_BASE + '/api/bills/' + billToSave._id.$oid, billToSave).subscribe(
 				data => {
 					this.billsEditBlock.stop();
-					this.dialogRef.close(true);				
+					this.dialogRef.close(true);
 				}
 			);
 		}

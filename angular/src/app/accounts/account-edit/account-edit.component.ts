@@ -46,17 +46,19 @@ export class AccountEditComponent implements OnInit {
 		{
 			this.account.Active = this.accountActive;
 			this.httpClient.put(Settings.API_BASE + '/api/account/' + this.account._id.$oid, this.account).subscribe(
-				data => { }
+				data => {
+					this.dialogRef.close(true);
+				}
 			);
 		}
 		else
 		{
 			this.account.Active = true;
 			this.httpClient.post(Settings.API_BASE + '/api/account', this.account).subscribe(
-				data => { }
+				data => {
+					this.dialogRef.close(true);
+				}
 			);
 		}
-
-		this.dialogRef.close(true);
 	}
 }

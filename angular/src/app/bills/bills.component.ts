@@ -138,7 +138,7 @@ export class BillsComponent implements OnInit {
 	}
 
 	OpenBillEdit(bill) {
-		this.dialog.open(BillsEditComponent, { height: '300 px', data: { data: bill, queryDate: this.queryDate } }).afterClosed().subscribe(
+		this.dialog.open(BillsEditComponent, { height: '300 px', data: { data: bill, queryDate: this.queryDate } }).beforeClose().subscribe(
 			data => {
 				if(data)
 					this.GetBillsAndShowSuccess();
@@ -146,7 +146,7 @@ export class BillsComponent implements OnInit {
 	}
 
 	OpenBillNew() {
-		this.dialog.open(BillsEditComponent, { height: '300 px', data: { data: null, queryDate: this.queryDate } }).afterClosed().subscribe(
+		this.dialog.open(BillsEditComponent, { height: '300 px', data: { data: null, queryDate: this.queryDate } }).beforeClose().subscribe(
 			data => {
 				if(data)
 					this.GetBillsAndShowSuccess();
