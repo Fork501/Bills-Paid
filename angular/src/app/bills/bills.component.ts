@@ -8,6 +8,7 @@ import { BillsEditComponent } from './bills-edit/bills-edit.component';
 import { Account } from '../models/account.model'
 import { Bill } from '../models/bill.model';
 import { BillMonth } from '../models/billMonth.model';
+import { Settings } from '../app.settings'
 
 @Component({
   selector: 'app-bills',
@@ -48,7 +49,7 @@ export class BillsComponent implements OnInit {
 			`Are you sure you want to delete bill for ${bill.AccountName} on ${dateString}?`
 		).subscribe(data => {
 			if(data)
-				this.httpClient.delete('/api/bills/' + bill._id.$oid).subscribe(
+				this.httpClient.delete(Settings.API_BASE + '/api/bills/' + bill._id.$oid).subscribe(
 					data => {
 						this.GetBillsAndShowSuccess();
 					}
@@ -57,7 +58,7 @@ export class BillsComponent implements OnInit {
 	}
 
 	GetAccounts() {
-		return this.httpClient.get<Account>('/api/account').subscribe(
+		return this.httpClient.get<Account>(Settings.API_BASE + '/api/account').subscribe(
 			data => {
 				let results: Account[] = [];
 				for(var i in data)
@@ -72,7 +73,7 @@ export class BillsComponent implements OnInit {
 
 	GetBills() {
 		this.billsTableBlock.start();
-		let url = `/api/bills/${this.GetFormattedDate()}`;
+		let url = Settings.API_BASE + `/api/bills/${this.GetFormattedDate()}`;
 		this.httpClient.get<string>(url).subscribe(
 			data => {
 				this.billMonth = JSON.parse(data) as BillMonth;
@@ -137,7 +138,7 @@ export class BillsComponent implements OnInit {
 	}
 
 	OpenBillEdit(bill) {
-		this.dialog.open(BillsEditComponent, { height: '300 px', data: { data: bill, queryDate: this.queryDate } }).afterClosed().subscribe(
+		this.dialog.open(BillsEditComponent, { height: '300 px', data: { data: bill, queryDate: this.queryDate } }).beforeClose().subscribe(
 			data => {
 				if(data)
 					this.GetBillsAndShowSuccess();
@@ -145,7 +146,7 @@ export class BillsComponent implements OnInit {
 	}
 
 	OpenBillNew() {
-		this.dialog.open(BillsEditComponent, { height: '300 px', data: { data: null, queryDate: this.queryDate } }).afterClosed().subscribe(
+		this.dialog.open(BillsEditComponent, { height: '300 px', data: { data: null, queryDate: this.queryDate } }).beforeClose().subscribe(
 			data => {
 				if(data)
 					this.GetBillsAndShowSuccess();

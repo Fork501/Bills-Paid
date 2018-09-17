@@ -1,27 +1,27 @@
 """Bills Paid"""
 from pyramid.config import Configurator
-from pyramid.view import view_config
+from pyramid.events import NewRequest
 
 API_ROUTES = [
 	# Account
-	{'route' : 'apiAccount', 'path' : '/account', 'request_method' : 'GET'},
-	{'route' : 'apiAccountCount', 'path' : '/account/count', 'request_method' : 'GET'},
-	{'route' : 'apiAccountCreate', 'path' : '/account', 'request_method' : 'POST'},
-	{'route' : 'apiAccountDelete', 'path' : '/account/{accountId}', 'request_method' : 'DELETE'},
-	{'route' : 'apiAccountUpdate', 'path' : '/account/{accountId}', 'request_method' : 'PUT'},
+	{'route': 'apiAccount', 'path': '/account', 'request_method': 'GET'},
+	{'route': 'apiAccountCount', 'path': '/account/count', 'request_method': 'GET'},
+	{'route': 'apiAccountCreate', 'path': '/account', 'request_method': 'POST'},
+	{'route': 'apiAccountDelete', 'path': '/account/{accountId}', 'request_method': 'DELETE'},
+	{'route': 'apiAccountUpdate', 'path': '/account/{accountId}', 'request_method': 'PUT'},
 
 	# Bills
-	{'route' : 'apiBillsCreate', 'path' : '/bills', 'request_method' : 'POST'},
-	{'route' : 'apiBillsDelete', 'path' : '/bills/{billId}', 'request_method' : 'DELETE'},
-	{'route' : 'apiBillsGetMonth', 'path' : '/bills/{date}', 'request_method' : 'GET'},
-	{'route' : 'apiBillsUpdate', 'path' : '/bills/{billId}', 'request_method' : 'PUT'}
+	{'route': 'apiBillsCreate', 'path': '/bills', 'request_method': 'POST'},
+	{'route': 'apiBillsDelete', 'path': '/bills/{billId}', 'request_method': 'DELETE'},
+	{'route': 'apiBillsGetMonth', 'path': '/bills/{date}', 'request_method': 'GET'},
+	{'route': 'apiBillsUpdate', 'path': '/bills/{billId}', 'request_method': 'PUT'}
 ]
 
 VIEW_ROUTES = [
-	{'route' : 'home', 'path' : '/'},
-	{'route' : 'accounts', 'path' : '/accounts'},
-	{'route' : 'bills', 'path' : '/bills'},
-	{'route' : 'dashboard', 'path' : '/dashboard'}
+	{'route': 'home', 'path': '/'},
+	{'route': 'accounts', 'path': '/accounts'},
+	{'route': 'bills', 'path': '/bills'},
+	{'route': 'dashboard', 'path': '/dashboard'}
 ]
 
 
@@ -35,7 +35,9 @@ def main(global_config, **settings):
 	config = Configurator(settings=settings)
 
 	config.include('pyramid_chameleon')
+	config.include('.cors')
 
+	config.add_cors_preflight_handler()
 	config.add_static_view('scripts', 'compiled/scripts', cache_max_age=0)
 	config.add_static_view('styles', 'compiled/styles', cache_max_age=0)
 

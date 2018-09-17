@@ -8,6 +8,7 @@ import { Bill } from '../../models/bill.model'
 import { MongoId } from '../../models/mongo-id.model';
 import { AccountEditComponent } from '../../accounts/account-edit/account-edit.component';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Settings } from '../../app.settings'
 
 @Component({
 	selector: 'app-bills-edit',
@@ -58,7 +59,7 @@ export class BillsEditComponent implements OnInit {
 	}
 
 	GetAccounts() {
-		this.httpClient.get<Account>('/api/account').subscribe(
+		this.httpClient.get<Account>(Settings.API_BASE + '/api/account').subscribe(
 			data => {
 				let results: Account[] = [];
 				for(var i in data)
@@ -97,7 +98,7 @@ export class BillsEditComponent implements OnInit {
 
 		if(!billToSave._id)
 		{
-			this.httpClient.post('/api/bills', billToSave).subscribe(
+			this.httpClient.post(Settings.API_BASE + '/api/bills', billToSave).subscribe(
 				data => {
 					this.billsEditBlock.stop();
 					this.dialogRef.close(true);				
@@ -106,10 +107,10 @@ export class BillsEditComponent implements OnInit {
 		}
 		else
 		{
-			this.httpClient.put('/api/bills/' + billToSave._id.$oid, billToSave).subscribe(
+			this.httpClient.put(Settings.API_BASE + '/api/bills/' + billToSave._id.$oid, billToSave).subscribe(
 				data => {
 					this.billsEditBlock.stop();
-					this.dialogRef.close(true);				
+					this.dialogRef.close(true);
 				}
 			);
 		}

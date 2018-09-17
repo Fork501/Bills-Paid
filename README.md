@@ -6,17 +6,17 @@ Navigate to the **angular** folder and run the following command:
 
 `npm install`
 
-## Building instructions
-Development should be done from the **angular** folder.  Since this is an ejected project, the build command uses `npm`, instead of `ng`:
+## Running the Website
+Navigate to the **angular** folder and run the following command:
 
-`npm run build`
+`ng serve`
 
-## Running the application
+To view the application in a browser, navigate to port 4200.  http://localhost:4200 (for example)
+
+## Running the API
 In the root folder for the project, run Pyramid's pserve with the associated .ini launch file:
 
 `pserve development.ini`
-
-To view the application in a browser, navigate to port 501.  http://localhost:501 (for example)
 
 ## Building the Docker container
 `docker build -t bills-paid:latest .`
