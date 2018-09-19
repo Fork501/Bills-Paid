@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
-import { Message } from '../models/message.model';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { ConfirmationBox } from '../confirmation-box/confirmation-box.service';
 import { BillsEditComponent } from './bills-edit/bills-edit.component';
 import { Account } from '../models/account.model'
-import { Bill } from '../models/bill.model';
 import { BillMonth } from '../models/billMonth.model';
 import { Settings } from '../app.settings'
 
@@ -20,11 +18,12 @@ export class BillsComponent implements OnInit {
 	accounts: Account[] = [];
 	billMonth: BillMonth = new BillMonth();
 	displayedColumnsPaid = [ 'Account', 'Date', 'Amount', 'Options' ];
-	displayedColumnsUpcoming = [ 'Account', 'Amount', 'Options' ];
+	// displayedColumnsUpcoming = [ 'Account', 'Amount', 'Options' ];
+	displayedColumnsUpcoming = [ 'Account', 'DueDate', 'Amount' ];
 	queryDate = new Date();
 	totalBillsPaid = 0;
 	totalBillsUpcoming = 0;
-	upcomingBills: Bill[] = [];
+	upcomingBills: Account[] = [];
 
 	@BlockUI('billsTable') billsTableBlock : NgBlockUI;
 
@@ -36,7 +35,8 @@ export class BillsComponent implements OnInit {
   	ngOnInit() {
 		this.GetBills();
 		this.GetAccounts();
-  	}
+		this.GetUpcomingBills();
+	}
 
 	DateAdd(months) {
 		this.queryDate = new Date(this.queryDate.setMonth(this.queryDate.getMonth() + months));
@@ -128,13 +128,25 @@ export class BillsComponent implements OnInit {
 	}
 
 	GetUpcomingBills() {
-		let found: boolean;
-		// If no match for account in the bill month, the bill is still upcoming
-		// We'll add $0 for bills that are skipped this month
-		this.accounts.forEach(account => {
-			// Do something with the accounts..?
-			//console.log(this.billMonth);
-		});
+		let url = Settings.API_BASE + `/api/bills/upcoming`;
+		this.httpClient.get<string>(url).subscribe(
+			data => {
+				this.upcomingBills = JSON.parse(data) as Account[];
+
+				if(this.upcomingBills)
+				{
+					this.totalBillsUpcoming = this.upcomingBills.length;
+				}
+				else
+					this.totalBillsUpcoming = 0;
+			}
+		);
+	}
+
+	GetUpcomingBillDueDate(dayOfMonth) {
+		var d = new Date();
+		var newDateString = (d.getMonth() + 1) + '/' + dayOfMonth + '/' + d.getFullYear();
+		return new Date(newDateString).toLocaleDateString("en-US", { timeZone: 'UTC' })
 	}
 
 	OpenBillEdit(bill) {

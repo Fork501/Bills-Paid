@@ -7,14 +7,22 @@
 <div class="mat-elevation-z5">
 	<mat-table #table [dataSource]="accounts" *blockUI="'accountsTable'">
 		<ng-container matColumnDef="Name">
-			<mat-header-cell *matHeaderCellDef class="col col-10">Name</mat-header-cell>
-			<mat-cell *matCellDef="let account" class="col col-10"> {{account.Name}}</mat-cell>
+			<mat-header-cell *matHeaderCellDef class="col col-2">Name</mat-header-cell>
+			<mat-cell *matCellDef="let account" class="col col-2">{{account.Name}}</mat-cell>
+		</ng-container>
+		<ng-container matColumnDef="Amount">
+			<mat-header-cell *matHeaderCellDef class="col col-2">Typical Amount</mat-header-cell>
+			<mat-cell *matCellDef="let account" class="col col-2">${{account.Amount}}</mat-cell>
+		</ng-container>
+		<ng-container matColumnDef="DayOfMonth">
+			<mat-header-cell *matHeaderCellDef class="col col-2">Draft Day</mat-header-cell>
+			<mat-cell *matCellDef="let account" class="col col-2">${{account.DayOfMonth}}</mat-cell>
 		</ng-container>
 		<ng-container matColumnDef="Options">
-			<mat-header-cell *matHeaderCellDef class="col col-2"></mat-header-cell>
-			<mat-cell *matCellDef="let account" class="col col-2 text-right">
-				<span class="col"><i class="fa fa-eye fa-lg color-royalblue clickable" (click)="OpenAccountEdit(account)"></i></span>
-				<span class="col"><i class="fa fa-times fa-lg color-tomato clickable" (click)="DeleteAccount(account)"></i></span>
+			<mat-header-cell *matHeaderCellDef class="col col-2-offset-10"></mat-header-cell>
+			<mat-cell *matCellDef="let account" class="col col-2-offset-10 text-right">
+				<span class="col col-1-offset-10"><i class="fa fa-eye fa-lg color-royalblue clickable" (click)="OpenAccountEdit(account)"></i></span>
+				<span class="col col-1"><i class="fa fa-times fa-lg color-tomato clickable" (click)="DeleteAccount(account)"></i></span>
 			</mat-cell>
 		</ng-container>
 		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

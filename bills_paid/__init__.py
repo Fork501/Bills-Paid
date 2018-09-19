@@ -13,6 +13,7 @@ API_ROUTES = [
 	# Bills
 	{'route': 'apiBillsCreate', 'path': '/bills', 'request_method': 'POST'},
 	{'route': 'apiBillsDelete', 'path': '/bills/{billId}', 'request_method': 'DELETE'},
+	{'route': 'apiBillsGetUpcoming', 'path': '/bills/upcoming', 'request_method': 'GET'},
 	{'route': 'apiBillsGetMonth', 'path': '/bills/{date}', 'request_method': 'GET'},
 	{'route': 'apiBillsUpdate', 'path': '/bills/{billId}', 'request_method': 'PUT'}
 ]

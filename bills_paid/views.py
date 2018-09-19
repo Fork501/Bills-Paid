@@ -1,8 +1,9 @@
 """Pyramid views"""
 import json
-from dateutil import parser
 from bson import json_util
+from datetime import datetime
 from bson.json_util import JSONOptions
+from dateutil import parser
 from pyramid.view import view_config, view_defaults
 from bills_paid.mongo import MongoClient
 
@@ -22,6 +23,7 @@ class AccountApi(object):
 			{
 				'Name': res['Name'],
 				'DayOfMonth': res['DayOfMonth'],
+				'Amount': res['Amount'],
 				'Active': res['Active']
 			})
 		return {'Success': True}
@@ -65,6 +67,7 @@ class AccountApi(object):
 			{
 				'Name': res['Name'],
 				'DayOfMonth': res['DayOfMonth'],
+				'Amount': res['Amount'],
 				'Active': res['Active']
 			}
 		)
@@ -102,7 +105,6 @@ class BillsPaidApi(object):
 		date = self.request.matchdict["date"]
 		date_parsed = parser.parse(date)
 		billing_months = self.mongo_client.get_billing_month(date_parsed.month, date_parsed.year)
-		options = JSONOptions(datetime_representation=json_util.DatetimeRepresentation.ISO8601)
 
 		accounts = self.mongo_client.get_all_accounts()
 		accounts_list = {}
@@ -118,7 +120,22 @@ class BillsPaidApi(object):
 					for bill in to_return['Bills']:
 						bill['AccountName'] = accounts_list[bill['AccountId']]
 
+		options = JSONOptions(datetime_representation=json_util.DatetimeRepresentation.ISO8601)
 		return json_util.dumps(to_return, json_options=options)
+
+	@view_config(route_name='apiBillsGetUpcoming', request_method='GET')
+	def get_upcoming_bills(self):
+		current_bills = self.mongo_client.get_billing_month(datetime.now().month, datetime.now().year)
+
+		accounts = list(self.mongo_client.get_active_accounts())
+
+		for current_bill in current_bills:
+			if 'Bills' in current_bill:
+				for bill in current_bill['Bills']:
+					accounts = [account for account in accounts if account['_id'] != bill['AccountId']]
+
+		options = JSONOptions(datetime_representation=json_util.DatetimeRepresentation.ISO8601)
+		return json_util.dumps(accounts, json_options=options)
 
 	@view_config(route_name="apiBillsUpdate", request_method="PUT")
 	def update_bill(self):

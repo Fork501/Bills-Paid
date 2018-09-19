@@ -5,4 +5,5 @@ export class Account {
 	Name: string;
 	DayOfMonth: number;
 	Active: boolean;
+	Amount: number;
 }
