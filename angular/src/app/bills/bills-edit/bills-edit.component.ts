@@ -33,7 +33,6 @@ export class BillsEditComponent implements OnInit {
 	constructor(
 		public dialogRef: MatDialogRef<AccountEditComponent>,
 		@Inject(MAT_DIALOG_DATA) data: any,
-		@Inject(MAT_DIALOG_DATA) queryDate: any,
 		private httpClient: HttpClient
 	) {
 		if(data && data.data) {
@@ -49,8 +48,12 @@ export class BillsEditComponent implements OnInit {
 		{
 			this.bill = new Bill();
 			this.bill.AccountId = new MongoId();
-			let dt = queryDate.queryDate;
-			this.billDate = new Date(dt.getFullYear(), dt.getMonth(), 1);
+			this.billDate = data.queryDate;
+
+			if(data.accountId)
+				this.billAccountId = data.accountId;
+			if(data.amount)
+				this.billAmount = data.amount;
 		}
 	}
 
@@ -113,6 +116,15 @@ export class BillsEditComponent implements OnInit {
 					this.dialogRef.close(true);
 				}
 			);
+		}
+	}
+
+	UpdateAmount() {
+		for(var account in this.accounts)
+		{
+			var tmpAccount = this.accounts[account];
+			if(this.billAccountId == tmpAccount._id.$oid)
+				this.billAmount = tmpAccount.Amount;
 		}
 	}
 }

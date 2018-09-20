@@ -132,10 +132,16 @@ class BillsPaidApi(object):
 		for current_bill in current_bills:
 			if 'Bills' in current_bill:
 				for bill in current_bill['Bills']:
-					accounts = [account for account in accounts if account['_id'] != bill['AccountId']]
+					for account in accounts:
+						if account['_id'] == bill['AccountId']:
+							account['Amount'] -= bill['Amount']
+
+		accounts = [account for account in accounts if int(account['Amount']) > 0]
+		bills_total = sum([account['Amount'] for account in accounts])
+		to_return = {'Accounts': accounts, 'BillsTotal': bills_total}
 
 		options = JSONOptions(datetime_representation=json_util.DatetimeRepresentation.ISO8601)
-		return json_util.dumps(accounts, json_options=options)
+		return json_util.dumps(to_return, json_options=options)
 
 	@view_config(route_name="apiBillsUpdate", request_method="PUT")
 	def update_bill(self):

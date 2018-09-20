@@ -20,7 +20,7 @@ export class AccountsComponent implements OnInit {
 
 	account = new Account();
 	accounts = new MatTableDataSource();
-	displayedColumns = [ 'Name', 'Amount', 'DayOfMonth', 'Options' ];
+	displayedColumns = [ 'Options', 'Name', 'Amount', 'DayOfMonth' ];
 	totalAccountsActive = 0;
 	totalAccountsInactive = 0;
 
@@ -80,6 +80,10 @@ export class AccountsComponent implements OnInit {
 			else
 				this.totalAccountsInactive += 1;
 		}
+	}
+
+	GetDollarString(money) {
+		return "$" + <string>parseFloat(money).toFixed(2)
 	}
 
 	OpenAccountEdit(account) {

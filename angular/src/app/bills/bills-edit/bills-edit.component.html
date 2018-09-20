@@ -22,7 +22,8 @@
 					name="account"
 					required
 					placeholder="Account"
-					[(ngModel)]="billAccountId">
+					[(ngModel)]="billAccountId"
+					(selectionChange)="UpdateAmount()">
 					<mat-option *ngFor="let account of accounts" [value]="account._id.$oid">
 						{{ account.Name }}
 					</mat-option>
