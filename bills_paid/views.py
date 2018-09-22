@@ -176,18 +176,46 @@ class PaycheckPaidApi(object):
 
 	@view_config(route_name="apiPaycheckCreate", request_method="POST")
 	def create_paycheck(self):
+		"""Creates a new paycheck"""
+		res = json.loads(self.request.body)
+		self.mongo_client.create_paycheck(
+			{
+				'Date': res['Date'],
+				'Amount': res['Amount']
+			})
 		return {'Success': True}
 
 	@view_config(route_name='apiPaycheckDelete', request_method='DELETE')
 	def delete_paycheck(self):
+		"""Deletes an existing paycheck"""
+		paycheck_id = self.request.matchdict["paycheckId"]
+
+		self.mongo_client.delete_paycheck(paycheck_id)
 		return {'Success': True}
 
 	@view_config(route_name='apiPaycheck', request_method='GET')
-	def get_paycheck(self):
-		return {}
+	def get_paychecks(self):
+		"""Retrieve all paychecks"""
+		return [
+			json.dumps
+			(
+				paycheck,
+				default=json_util.default
+			) for paycheck in self.mongo_client.get_all_paychecks()
+		]
 
 	@view_config(route_name="apiPaycheckUpdate", request_method="PUT")
 	def update_paycheck(self):
+		"""Updates an existing paycheck"""
+		paycheck_id = self.request.matchdict["paycheckId"]
+		res = json.loads(self.request.body)
+		self.mongo_client.update_paycheck(
+			paycheck_id,
+			{
+				'Date': res['Date'],
+				'Amount': res['Amount']
+			}
+		)
 		return {'Success': True}
 
 

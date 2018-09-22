@@ -15,14 +15,14 @@
 		</ng-container>
 		<ng-container matColumnDef="Date">
 			<mat-header-cell *matHeaderCellDef class="col col-2">Date</mat-header-cell>
-			<mat-cell *matCellDef="let paycheck" class="col col-2">{{paycheck.Name}}</mat-cell>
+			<mat-cell *matCellDef="let paycheck" class="col col-2">{{paycheck.Date}}</mat-cell>
 		</ng-container>
 		<ng-container matColumnDef="Amount">
 			<mat-header-cell *matHeaderCellDef class="col col-2">Amount</mat-header-cell>
 			<mat-cell *matCellDef="let paycheck" class="col col-2">{{GetDollarString(paycheck.Amount)}}</mat-cell>
 		</ng-container>
 		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-		<mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'background-color-danger' : !row.Active}"></mat-row>
+		<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 	</mat-table>
 </div>
 <div class="col col-3 offset-9" style="margin-bottom:15px;">
