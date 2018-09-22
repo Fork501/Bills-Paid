@@ -15,7 +15,13 @@ API_ROUTES = [
 	{'route': 'apiBillsDelete', 'path': '/bills/{billId}', 'request_method': 'DELETE'},
 	{'route': 'apiBillsGetUpcoming', 'path': '/bills/upcoming', 'request_method': 'GET'},
 	{'route': 'apiBillsGetMonth', 'path': '/bills/{date}', 'request_method': 'GET'},
-	{'route': 'apiBillsUpdate', 'path': '/bills/{billId}', 'request_method': 'PUT'}
+	{'route': 'apiBillsUpdate', 'path': '/bills/{billId}', 'request_method': 'PUT'},
+
+	# Paychecks
+	{'route': 'apiPaycheck', 'path': '/paycheck', 'request_method': 'GET'},
+	{'route': 'apiPaycheckCreate', 'path': '/paycheck', 'request_method': 'POST'},
+	{'route': 'apiPaycheckDelete', 'path': '/paycheck/{paycheckId}', 'request_method': 'DELETE'},
+	{'route': 'apiPaycheckUpdate', 'path': '/paycheck/{paycheckId}', 'request_method': 'PUT'}
 ]
 
 VIEW_ROUTES = [

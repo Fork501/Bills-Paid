@@ -167,6 +167,30 @@ class BillsPaidApi(object):
 		return {'Success': True}
 
 
+@view_defaults(route_name='apiPaycheck', renderer='json')
+class PaycheckPaidApi(object):
+	"""API methods for /billspaid"""
+	def __init__(self, request):
+		self.request = request
+		self.mongo_client = MongoClient()
+
+	@view_config(route_name="apiPaycheckCreate", request_method="POST")
+	def create_paycheck(self):
+		return {'Success': True}
+
+	@view_config(route_name='apiPaycheckDelete', request_method='DELETE')
+	def delete_paycheck(self):
+		return {'Success': True}
+
+	@view_config(route_name='apiPaycheck', request_method='GET')
+	def get_paycheck(self):
+		return {}
+
+	@view_config(route_name="apiPaycheckUpdate", request_method="PUT")
+	def update_paycheck(self):
+		return {'Success': True}
+
+
 @view_defaults(renderer='index.html')
 class BillsPaidViews(object):
 	"""View routes"""
