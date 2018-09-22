@@ -44,6 +44,11 @@
 			</mat-form-field>
 		</div>
 		<div class="row">
+			<mat-slide-toggle
+				[(ngModel)]="billPosted"
+				name='billPosted'></mat-slide-toggle>
+		</div>
+		<div class="row">
 			<div class="col col-12 text-center">
 				<button type="submit" class="btn btn-lg btn-primary" (click)="SaveBill()">Save</button>
 			</div>

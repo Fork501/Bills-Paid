@@ -26,6 +26,7 @@ export class BillsEditComponent implements OnInit {
 	billAmount: number;
 	billDate: Date;
 	billId: MongoId;
+	billPosted: boolean;
 
 	minDate: Date;
 	maxDate: Date;
@@ -41,6 +42,7 @@ export class BillsEditComponent implements OnInit {
 			this.billAmount = this.bill.Amount;
 			this.billDate = this.GetDateFromAPIDateObject(this.bill.Date);
 			this.billId = this.bill._id;
+			this.billPosted = this.bill.Posted;
 
 			this.GetMinAndMax();
 		}
@@ -48,13 +50,16 @@ export class BillsEditComponent implements OnInit {
 		{
 			this.bill = new Bill();
 			this.bill.AccountId = new MongoId();
-			this.billDate = data.queryDate;
 
 			if(data.accountId)
 				this.billAccountId = data.accountId;
 			if(data.amount)
 				this.billAmount = data.amount;
-		}
+			if(data.billPosted)
+				this.billPosted = data.billPosted;
+			if(data.queryDate)
+				this.billDate = data.queryDate;
+			}
 	}
 
 	ngOnInit() {
@@ -98,6 +103,7 @@ export class BillsEditComponent implements OnInit {
 		billToSave.AccountId.$oid = this.billAccountId;
 		billToSave.Amount = this.billAmount;
 		billToSave.Date = new Date(this.billDate);
+		billToSave.Posted = this.billPosted ? this.billPosted : false;
 
 		if(!billToSave._id)
 		{

@@ -6,4 +6,5 @@ export class Bill {
 	AccountName: string;
 	Date: Date;
 	Amount: number;
+	Posted: boolean;
 }

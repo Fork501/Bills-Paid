@@ -35,7 +35,7 @@
 					<mat-cell *matCellDef="let bill" class="col col-2">{{GetDollarString(bill.Amount)}}</mat-cell>
 				</ng-container>
 				<mat-header-row *matHeaderRowDef="displayedColumnsPaid"></mat-header-row>
-				<mat-row *matRowDef="let row; columns: displayedColumnsPaid;"></mat-row>
+				<mat-row *matRowDef="let row; columns: displayedColumnsPaid;" [ngClass]="{'background-color-warning' : !row.Posted}"></mat-row>
 			</mat-table>
 			<div class="col col-3 offset-9" style="margin-bottom:15px;">
 				<mat-chip-list class="float-right" style="height:100px;">
@@ -45,8 +45,8 @@
 					<mat-chip *ngIf="billMonth.BillsPaid" color="primary" class="mat-elevation-z6">
 						Bills Paid: {{GetDollarString(billMonth.BillsPaid)}}
 					</mat-chip>
-					<mat-chip *ngIf="billMonth.PaymentsPending" color="primary" class="mat-elevation-z6">
-						Payments Pending: {{GetDollarString(billMonth.PaymentsPending)}}
+					<mat-chip *ngIf="billMonth.BillsPending" color="primary" class="mat-elevation-z6">
+						Bills Pending: {{GetDollarString(billMonth.BillsPending)}}
 					</mat-chip>
 				</mat-chip-list>
 			</div>

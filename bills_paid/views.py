@@ -85,7 +85,7 @@ class BillsPaidApi(object):
 	def create_bill(self):
 		"""Creates a line item for a bill"""
 		res = json.loads(self.request.body)
-		self.mongo_client.create_bill(res["Date"], res['Amount'], res['AccountId']['$oid'])
+		self.mongo_client.create_bill(res["Date"], res['Amount'], res['Posted'], res['AccountId']['$oid'])
 		return {'Success': True}
 
 	@view_config(route_name='apiBillsDelete', request_method='DELETE')
@@ -111,6 +111,9 @@ class BillsPaidApi(object):
 		for account in accounts:
 			accounts_list[account['_id']] = account['Name']
 
+		bills_paid = 0
+		bills_pending = 0
+
 		# Funky logic
 		to_return = {}
 		if billing_months:
@@ -119,6 +122,13 @@ class BillsPaidApi(object):
 				if 'Bills' in to_return:
 					for bill in to_return['Bills']:
 						bill['AccountName'] = accounts_list[bill['AccountId']]
+						if bill['Posted']:
+							bills_paid += bill['Amount']
+						else:
+							bills_pending += bill['Amount']
+
+		to_return['BillsPaid'] = bills_paid
+		to_return['BillsPending'] = bills_pending
 
 		options = JSONOptions(datetime_representation=json_util.DatetimeRepresentation.ISO8601)
 		return json_util.dumps(to_return, json_options=options)
@@ -150,6 +160,7 @@ class BillsPaidApi(object):
 		self.mongo_client.update_bill(
 			res["Date"],
 			res['Amount'],
+			res['Posted'],
 			res['AccountId'],
 			res['_id'],
 			self.request.matchdict['billId'])

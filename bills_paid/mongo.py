@@ -49,7 +49,7 @@ class MongoClient(object):
 			{ "Bills.AccountId" : ObjectId(account_id) }
 		).count()
 
-	def create_bill(self, date, amount, account_id):
+	def create_bill(self, date, amount, posted, account_id):
 		"""Retrieve a specified billing month"""
 		parsed_date = parser.parse(date)
 
@@ -66,7 +66,8 @@ class MongoClient(object):
 								'_id': ObjectId(),
 								'AccountId': ObjectId(account_id),
 								'Date': datetime(parsed_date.year, parsed_date.month, parsed_date.day),
-								'Amount': amount
+								'Amount': amount,
+								'Posted': posted
 							}
 						],
 						'$sort': {'Date': 1}
@@ -89,21 +90,11 @@ class MongoClient(object):
 
 	def get_billing_month(self, month, year):
 		"""Retrieve a specified billing month"""
-		return self.db_conn.bills.aggregate(
-			[
-				{
-					'$match': {'BillingMonth' : datetime(year, month, 1)}
-				},
-				{
-					'$addFields':
-					{
-						'BillsPaid': {'$sum': "$Bills.Amount"}
-					}
-				}
-			]
-		)
+		to_return = self.db_conn.bills.find({'BillingMonth': datetime(year, month, 1)})
 
-	def update_bill(self, date, amount, account_id, bill_id, _id):
+		return to_return
+
+	def update_bill(self, date, amount, posted, account_id, bill_id, _id):
 		"""Retrieve a specified billing month"""
 		_id = ObjectId(_id)
 		account_id = ObjectId(account_id['$oid'])
@@ -125,7 +116,8 @@ class MongoClient(object):
 						'_id': bill_id,
 						'AccountId': account_id,
 						'Date': parsed_date,
-						'Amount': amount
+						'Amount': amount,
+						'Posted': posted
 					}
 				}
 			},

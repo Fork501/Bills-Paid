@@ -10,6 +10,10 @@ body {
 	background-color: #FEF2F2;
 }
 
+.background-color-warning {
+	background-color: #F8FCCC;
+}
+
 .clickable {
 	cursor: pointer;
 }
