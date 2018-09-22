@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
-import { Message } from '../models/message.model';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { ConfirmationBox } from '../confirmation-box/confirmation-box.service';
 import { BillsEditComponent } from './bills-edit/bills-edit.component';
 import { Account } from '../models/account.model'
-import { Bill } from '../models/bill.model';
 import { BillMonth } from '../models/billMonth.model';
 import { Settings } from '../app.settings'
+import { UpcomingBills } from '../models/upcomingBills';
 
 @Component({
   selector: 'app-bills',
@@ -19,12 +18,12 @@ export class BillsComponent implements OnInit {
 
 	accounts: Account[] = [];
 	billMonth: BillMonth = new BillMonth();
-	displayedColumnsPaid = [ 'Account', 'Date', 'Amount', 'Options' ];
-	displayedColumnsUpcoming = [ 'Account', 'Amount', 'Options' ];
+	displayedColumnsPaid = [ 'Options', 'Account', 'Date', 'Amount' ];
+	displayedColumnsUpcoming = [ 'Options', 'Account', 'DueDate', 'Amount' ];
 	queryDate = new Date();
 	totalBillsPaid = 0;
 	totalBillsUpcoming = 0;
-	upcomingBills: Bill[] = [];
+	upcomingBills: UpcomingBills = new UpcomingBills();
 
 	@BlockUI('billsTable') billsTableBlock : NgBlockUI;
 
@@ -34,9 +33,8 @@ export class BillsComponent implements OnInit {
 		public confirmationBox: ConfirmationBox) { }
 
   	ngOnInit() {
-		this.GetBills();
-		this.GetAccounts();
-  	}
+		this.ResetBillsList();
+	}
 
 	DateAdd(months) {
 		this.queryDate = new Date(this.queryDate.setMonth(this.queryDate.getMonth() + months));
@@ -57,20 +55,6 @@ export class BillsComponent implements OnInit {
 		});
 	}
 
-	GetAccounts() {
-		return this.httpClient.get<Account>(Settings.API_BASE + '/api/account').subscribe(
-			data => {
-				let results: Account[] = [];
-				for(var i in data)
-					results.push(JSON.parse(data[i]));
-
-				this.accounts = results;
-
-				this.GetUpcomingBills();
-			}
-		);
-	}
-
 	GetBills() {
 		this.billsTableBlock.start();
 		let url = Settings.API_BASE + `/api/bills/${this.GetFormattedDate()}`;
@@ -82,10 +66,7 @@ export class BillsComponent implements OnInit {
 					this.billMonth = new BillMonth();
 
 				if(this.billMonth.Bills)
-				{
-					console.info(this.billMonth.Bills);
 					this.totalBillsPaid = this.billMonth.Bills.length;
-				}
 				else
 					this.totalBillsPaid = 0;
 
@@ -95,7 +76,7 @@ export class BillsComponent implements OnInit {
 	}
 
 	GetBillsAndShowSuccess() {
-		this.GetBills();
+		this.ResetBillsList();
 		this.snackbar.open('Success!', null, { duration: 2000 });
 	}
 
@@ -127,29 +108,53 @@ export class BillsComponent implements OnInit {
 		return `${year}-${month}-1`;
 	}
 
+	GetUpcomingBillDueDate(dayOfMonth) {
+		var d = new Date();
+		var newDateString = (d.getMonth() + 1) + '/' + dayOfMonth + '/' + d.getFullYear();
+		return new Date(newDateString).toLocaleDateString("en-US", { timeZone: 'UTC' })
+	}
+
 	GetUpcomingBills() {
-		let found: boolean;
-		// If no match for account in the bill month, the bill is still upcoming
-		// We'll add $0 for bills that are skipped this month
-		this.accounts.forEach(account => {
-			// Do something with the accounts..?
-			//console.log(this.billMonth);
-		});
+		let url = Settings.API_BASE + `/api/bills/upcoming`;
+		this.httpClient.get<string>(url).subscribe(
+			data => {
+				this.upcomingBills = JSON.parse(data) as UpcomingBills;
+
+				if(this.upcomingBills)
+					this.totalBillsUpcoming = this.upcomingBills.Accounts.length;
+				else
+					this.totalBillsUpcoming = 0;
+			}
+		);
 	}
 
 	OpenBillEdit(bill) {
-		this.dialog.open(BillsEditComponent, { height: '300 px', data: { data: bill, queryDate: this.queryDate } }).beforeClose().subscribe(
+		this.dialog.open(BillsEditComponent, { height: '300 px', data: { data: bill } }).beforeClose().subscribe(
 			data => {
 				if(data)
 					this.GetBillsAndShowSuccess();
+		});
+	}
+
+	OpenBillEditForUpcoming(accountId, amount) {
+		this.dialog.open(BillsEditComponent, { height: '300 px', data: { accountId: accountId, amount: amount, queryDate: new Date() } }).beforeClose().subscribe(
+			data => {
+				if(data)
+					this.ResetBillsList();
 		});
 	}
 
 	OpenBillNew() {
-		this.dialog.open(BillsEditComponent, { height: '300 px', data: { data: null, queryDate: this.queryDate } }).beforeClose().subscribe(
+		var queryDate = new Date(this.queryDate.getFullYear(), this.queryDate.getMonth(), 1);
+		this.dialog.open(BillsEditComponent, { height: '300 px', data: { data: null, queryDate: queryDate } }).beforeClose().subscribe(
 			data => {
 				if(data)
 					this.GetBillsAndShowSuccess();
 		});
+	}
+
+	ResetBillsList() {
+		this.GetBills();
+		this.GetUpcomingBills();
 	}
 }

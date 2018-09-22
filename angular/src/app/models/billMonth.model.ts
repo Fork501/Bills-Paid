@@ -6,4 +6,5 @@ export class BillMonth {
 	BillingMonth: Date;
 	Bills: Bill[];
 	BillsPaid: number;
+	BillsPending: number;
 }

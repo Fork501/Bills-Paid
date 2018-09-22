@@ -26,6 +26,7 @@ export class BillsEditComponent implements OnInit {
 	billAmount: number;
 	billDate: Date;
 	billId: MongoId;
+	billPosted: boolean;
 
 	minDate: Date;
 	maxDate: Date;
@@ -33,7 +34,6 @@ export class BillsEditComponent implements OnInit {
 	constructor(
 		public dialogRef: MatDialogRef<AccountEditComponent>,
 		@Inject(MAT_DIALOG_DATA) data: any,
-		@Inject(MAT_DIALOG_DATA) queryDate: any,
 		private httpClient: HttpClient
 	) {
 		if(data && data.data) {
@@ -42,6 +42,7 @@ export class BillsEditComponent implements OnInit {
 			this.billAmount = this.bill.Amount;
 			this.billDate = this.GetDateFromAPIDateObject(this.bill.Date);
 			this.billId = this.bill._id;
+			this.billPosted = this.bill.Posted;
 
 			this.GetMinAndMax();
 		}
@@ -49,9 +50,16 @@ export class BillsEditComponent implements OnInit {
 		{
 			this.bill = new Bill();
 			this.bill.AccountId = new MongoId();
-			let dt = queryDate.queryDate;
-			this.billDate = new Date(dt.getFullYear(), dt.getMonth(), 1);
-		}
+
+			if(data.accountId)
+				this.billAccountId = data.accountId;
+			if(data.amount)
+				this.billAmount = data.amount;
+			if(data.billPosted)
+				this.billPosted = data.billPosted;
+			if(data.queryDate)
+				this.billDate = data.queryDate;
+			}
 	}
 
 	ngOnInit() {
@@ -95,6 +103,7 @@ export class BillsEditComponent implements OnInit {
 		billToSave.AccountId.$oid = this.billAccountId;
 		billToSave.Amount = this.billAmount;
 		billToSave.Date = new Date(this.billDate);
+		billToSave.Posted = this.billPosted ? this.billPosted : false;
 
 		if(!billToSave._id)
 		{
@@ -113,6 +122,15 @@ export class BillsEditComponent implements OnInit {
 					this.dialogRef.close(true);
 				}
 			);
+		}
+	}
+
+	UpdateAmount() {
+		for(var account in this.accounts)
+		{
+			var tmpAccount = this.accounts[account];
+			if(this.billAccountId == tmpAccount._id.$oid)
+				this.billAmount = tmpAccount.Amount;
 		}
 	}
 }

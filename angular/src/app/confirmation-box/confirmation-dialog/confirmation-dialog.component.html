@@ -1,9 +1,15 @@
 <mat-dialog-content>
-  {{message}}
+	{{message}}
 </mat-dialog-content>
 <mat-dialog-actions>
-  <div class="col col-12 text-center">
-	  <button mat-button [mat-dialog-close]="true" class="btn btn-success">Ok</button>
-	  <button mat-button mat-dialog-close cdkFocusInitial class="btn btn-danger">Cancel</button>
-  </div>
+	<div class="col col-12">
+		<div class="row justify-content-md-center">
+			<div class="col-6">
+				<button mat-button [mat-dialog-close]="true" class="btn btn-block btn-success">Ok</button>
+			</div>
+			<div class="col-6">
+				<button mat-button mat-dialog-close cdkFocusInitial class="btn btn-block btn-danger">Cancel</button>
+			</div>
+		</div>
+	</div>
 </mat-dialog-actions>

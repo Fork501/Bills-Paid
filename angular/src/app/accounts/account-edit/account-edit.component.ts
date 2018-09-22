@@ -16,6 +16,7 @@ export class AccountEditComponent implements OnInit {
 
 	account: Account;
 	accountActive: boolean;
+	accountAmount: number;
 	accountDayOfMonth: number;
 	accountName: string;
 
@@ -25,6 +26,7 @@ export class AccountEditComponent implements OnInit {
 			this.accountName = this.account.Name;
 			this.accountDayOfMonth = this.account.DayOfMonth;
 			this.accountActive = this.account.Active;
+			this.accountAmount = this.account.Amount;
 		}
 		else
 			this.account = new Account();
@@ -41,6 +43,7 @@ export class AccountEditComponent implements OnInit {
 
 		this.account.Name = this.accountName;
 		this.account.DayOfMonth = this.accountDayOfMonth;
+		this.account.Amount = this.accountAmount;
 
 		if(this.account != null && this.account._id != null && this.account._id.$oid != null && this.account._id.$oid != '')
 		{

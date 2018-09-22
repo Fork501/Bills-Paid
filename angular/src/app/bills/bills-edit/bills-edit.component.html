@@ -22,7 +22,8 @@
 					name="account"
 					required
 					placeholder="Account"
-					[(ngModel)]="billAccountId">
+					[(ngModel)]="billAccountId"
+					(selectionChange)="UpdateAmount()">
 					<mat-option *ngFor="let account of accounts" [value]="account._id.$oid">
 						{{ account.Name }}
 					</mat-option>
@@ -41,6 +42,11 @@
 					step="0.01"
 					[(ngModel)]="billAmount" />
 			</mat-form-field>
+		</div>
+		<div class="row">
+			<mat-slide-toggle
+				[(ngModel)]="billPosted"
+				name='billPosted'></mat-slide-toggle>
 		</div>
 		<div class="row">
 			<div class="col col-12 text-center">

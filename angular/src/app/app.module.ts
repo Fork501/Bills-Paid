@@ -9,7 +9,7 @@ import { AppRoutingModule } from './/app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
 	MatCardModule,
-	MatSlideToggleModule,
+	MatCheckboxModule,
 	MatChipsModule,
 	MatDatepickerModule,
 	MatDialogModule,
@@ -20,11 +20,11 @@ import {
 	MatOptionModule,
 	MatSelectModule,
 	MatSidenavModule,
+	MatSlideToggleModule,
 	MatSnackBarModule,
 	MatTableModule,
 	MatTabsModule,
-	MatToolbarModule,
-	MatCheckboxModule
+	MatToolbarModule
 } from '@angular/material';
 
 import { BlockUIModule } from 'ng-block-ui'
@@ -53,10 +53,10 @@ import { BillsEditComponent } from './bills/bills-edit/bills-edit.component';
 		BrowserAnimationsModule,
 		BrowserModule,
 		FormsModule,
-		MatCheckboxModule,
-		MatChipsModule,
 		HttpClientModule,
 		MatCardModule,
+		MatCheckboxModule,
+		MatChipsModule,
 		MatDatepickerModule,
 		MatDialogModule,
 		MatIconModule,

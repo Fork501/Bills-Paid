@@ -7,7 +7,6 @@ import { Account } from '../models/account.model'
 import { AccountEditComponent } from './account-edit/account-edit.component'
 
 import { ConfirmationBox } from '../confirmation-box/confirmation-box.service'
-import { ConfirmationDialogComponent } from '../confirmation-box/confirmation-dialog/confirmation-dialog.component';
 import { ResponseMessage } from '../models/response-message';
 import { Settings } from '../app.settings'
 
@@ -21,7 +20,7 @@ export class AccountsComponent implements OnInit {
 
 	account = new Account();
 	accounts = new MatTableDataSource();
-	displayedColumns = [ 'Name', 'Options' ];
+	displayedColumns = [ 'Options', 'Name', 'Amount', 'DayOfMonth' ];
 	totalAccountsActive = 0;
 	totalAccountsInactive = 0;
 
@@ -81,6 +80,10 @@ export class AccountsComponent implements OnInit {
 			else
 				this.totalAccountsInactive += 1;
 		}
+	}
+
+	GetDollarString(money) {
+		return "$" + <string>parseFloat(money).toFixed(2)
 	}
 
 	OpenAccountEdit(account) {
