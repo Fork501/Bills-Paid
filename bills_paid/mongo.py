@@ -124,3 +124,31 @@ class MongoClient(object):
 			upsert=False)
 
 	# END Bill
+
+	# BEGIN Paycheck
+
+	def create_paycheck(self, paycheck):
+		"""Insert a new paycheck"""
+		self.db_conn.paycheck.insert(paycheck)
+
+	def delete_paycheck(self, paycheck_id):
+		"""Update an existing paycheck"""
+		self.db_conn.paycheck.delete_one({'_id': ObjectId(paycheck_id)})
+
+	def get_active_paychecks(self):
+		"""Get a list of all paychecks"""
+		return self.db_conn.paycheck.find({'Active': True}).sort('Name', pymongo.ASCENDING)
+
+	def get_all_paychecks(self):
+		"""Get a list of all paychecks"""
+		return self.db_conn.paycheck.find().sort('Name', pymongo.ASCENDING)
+
+	def get_paychecks_count(self):
+		"""Get a list of all paychecks"""
+		return self.db_conn.paycheck.count()
+
+	def update_paycheck(self, paycheck_id, paycheck):
+		"""Update an existing paycheck"""
+		self.db_conn.paycheck.update_one({'_id': ObjectId(paycheck_id)}, {'$set': paycheck})
+
+	# END Paycheck

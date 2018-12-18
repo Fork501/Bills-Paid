@@ -1,0 +1,34 @@
+<div class="header col col-12">
+	<div class="row">
+		<span class="h2">Paychecks</span>
+		<span style="padding-top:5px; margin-left:8px;"><i class="fa fa-sm fa-plus-circle color-forestgreen clickable" (click)="OpenPaycheckNew()"></i></span>
+	</div>
+</div>
+<div class="mat-elevation-z5">
+	<mat-table #table [dataSource]="paychecks" *blockUI="'paychecksTable'">
+		<ng-container matColumnDef="Options">
+			<mat-header-cell *matHeaderCellDef class="col col-1"></mat-header-cell>
+			<mat-cell *matCellDef="let paycheck" class="col col-1">
+				<span class="col col-5"><i class="fa fa-eye fa-lg color-royalblue clickable" (click)="OpenPaycheckEdit(paycheck)"></i></span>
+				<span class="col col-5"><i class="fa fa-times fa-lg color-tomato clickable" (click)="DeletePaycheck(paycheck)"></i></span>
+			</mat-cell>
+		</ng-container>
+		<ng-container matColumnDef="Date">
+			<mat-header-cell *matHeaderCellDef class="col col-2">Date</mat-header-cell>
+			<mat-cell *matCellDef="let paycheck" class="col col-2">{{paycheck.Date}}</mat-cell>
+		</ng-container>
+		<ng-container matColumnDef="Amount">
+			<mat-header-cell *matHeaderCellDef class="col col-2">Amount</mat-header-cell>
+			<mat-cell *matCellDef="let paycheck" class="col col-2">{{GetDollarString(paycheck.Amount)}}</mat-cell>
+		</ng-container>
+		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+		<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+	</mat-table>
+</div>
+<div class="col col-3 offset-9" style="margin-bottom:15px;">
+	<mat-chip-list class="float-right" style="height:100px;">
+		<mat-chip color="primary" class="mat-elevation-z6" *ngIf="totalPaychecksActive > 0">
+			{{totalPaychecks}} Total Paycheck{{totalPaychecks == 1 ? "" : "s"}}
+		</mat-chip>
+	</mat-chip-list>
+</div>

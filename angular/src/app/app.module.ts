@@ -32,10 +32,12 @@ import { BlockUIModule } from 'ng-block-ui'
 import { AccountsComponent } from './accounts/accounts.component';
 import { AccountEditComponent } from './accounts/account-edit/account-edit.component';
 import { BillsComponent } from './bills/bills.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { BillsEditComponent } from './bills/bills-edit/bills-edit.component';
 import { ConfirmationBox } from './confirmation-box/confirmation-box.service';
 import { ConfirmationDialogComponent } from './confirmation-box/confirmation-dialog/confirmation-dialog.component';
-import { BillsEditComponent } from './bills/bills-edit/bills-edit.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { PaychecksComponent } from './paychecks/paychecks.component';
+import { PaycheckEditComponent } from './paychecks/paycheck-edit/paycheck-edit.component';
 
 @NgModule({
 	declarations: [
@@ -43,9 +45,11 @@ import { BillsEditComponent } from './bills/bills-edit/bills-edit.component';
 		AccountsComponent,
 		AccountEditComponent,
 		BillsComponent,
+		BillsEditComponent,
 		ConfirmationDialogComponent,
 		DashboardComponent,
-		BillsEditComponent
+		PaychecksComponent,
+		PaycheckEditComponent,
 	],
 	imports: [
 		AppRoutingModule,
@@ -100,7 +104,8 @@ import { BillsEditComponent } from './bills/bills-edit/bills-edit.component';
 	entryComponents: [
 		AccountEditComponent,
 		BillsEditComponent,
-		ConfirmationDialogComponent
+		ConfirmationDialogComponent,
+		PaycheckEditComponent
 	]
 })
 export class AppModule { }

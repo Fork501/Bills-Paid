@@ -167,6 +167,58 @@ class BillsPaidApi(object):
 		return {'Success': True}
 
 
+@view_defaults(route_name='apiPaycheck', renderer='json')
+class PaycheckPaidApi(object):
+	"""API methods for /billspaid"""
+	def __init__(self, request):
+		self.request = request
+		self.mongo_client = MongoClient()
+
+	@view_config(route_name="apiPaycheckCreate", request_method="POST")
+	def create_paycheck(self):
+		"""Creates a new paycheck"""
+		res = json.loads(self.request.body)
+		self.mongo_client.create_paycheck(
+			{
+				'Date': res['Date'],
+				'Amount': res['Amount']
+			})
+		return {'Success': True}
+
+	@view_config(route_name='apiPaycheckDelete', request_method='DELETE')
+	def delete_paycheck(self):
+		"""Deletes an existing paycheck"""
+		paycheck_id = self.request.matchdict["paycheckId"]
+
+		self.mongo_client.delete_paycheck(paycheck_id)
+		return {'Success': True}
+
+	@view_config(route_name='apiPaycheck', request_method='GET')
+	def get_paychecks(self):
+		"""Retrieve all paychecks"""
+		return [
+			json.dumps
+			(
+				paycheck,
+				default=json_util.default
+			) for paycheck in self.mongo_client.get_all_paychecks()
+		]
+
+	@view_config(route_name="apiPaycheckUpdate", request_method="PUT")
+	def update_paycheck(self):
+		"""Updates an existing paycheck"""
+		paycheck_id = self.request.matchdict["paycheckId"]
+		res = json.loads(self.request.body)
+		self.mongo_client.update_paycheck(
+			paycheck_id,
+			{
+				'Date': res['Date'],
+				'Amount': res['Amount']
+			}
+		)
+		return {'Success': True}
+
+
 @view_defaults(renderer='index.html')
 class BillsPaidViews(object):
 	"""View routes"""
